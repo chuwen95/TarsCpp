@@ -35,5 +35,6 @@ if(UNIX)
 endif(UNIX)
 
 install(TARGETS tarsparse
+        EXPORT tarsservant-targets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
