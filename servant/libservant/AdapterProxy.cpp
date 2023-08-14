@@ -137,7 +137,7 @@ void AdapterProxy::onCloseCallback(TC_Transceiver* trans, TC_Transceiver::CloseR
 {
     if(_objectProxy->getRootServantProxy()->tars_get_push_callback())
     {
-		_objectProxy->getRootServantProxy()->tars_get_push_callback()->onClose();
+		_objectProxy->getRootServantProxy()->tars_get_push_callback()->onClose(trans->getConnectEndpoint());
     }
 
     int millisecond =_objectProxy->reconnect();
