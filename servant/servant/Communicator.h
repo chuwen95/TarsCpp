@@ -37,7 +37,7 @@
 // #include "zipkin/ip_address.h"
 // #endif
 // 
-const static string CONFIG_ROOT_PATH = string("/tars/application/client");
+const static std::string CONFIG_ROOT_PATH = std::string("/tars/application/client");
 
 /**
  * 设计核心:
@@ -492,7 +492,7 @@ protected:
     /**
      * 私有网络线程, 会动态变化
      */
-    unordered_map<size_t, shared_ptr<CommunicatorEpoll>>	_schedCommunicatorEpoll;
+    std::unordered_map<size_t, shared_ptr<CommunicatorEpoll>>	_schedCommunicatorEpoll;
 
     /**
      * 操作通信器的锁
@@ -542,7 +542,7 @@ protected:
 	/**
 	 * ssl
 	 */
-	unordered_map<string, shared_ptr<TC_OpenSSL::CTX>> _objCtx;
+	std::unordered_map<string, shared_ptr<TC_OpenSSL::CTX>> _objCtx;
 
     /*
      * 异步线程数组

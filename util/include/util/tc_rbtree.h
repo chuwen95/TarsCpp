@@ -25,10 +25,11 @@
 #include "util/tc_pack.h"
 #include "util/tc_mem_chunk.h"
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 /////////////////////////////////////////////////
 /** 
 * @file tc_rbtree.h 
@@ -278,7 +279,7 @@ public:
          * @param iDatalen
          * @param vtData, 淘汰的数据
          */
-        int set(const string& k, const string& v, bool bNewBlock, bool bOnlyKey, vector<TC_RBTree::BlockData> &vtData);
+        int set(const std::string& k, const std::string& v, bool bNewBlock, bool bOnlyKey, std::vector<TC_RBTree::BlockData> &vtData);
 
         /**
          * 是否是脏数据
@@ -603,7 +604,7 @@ public:
 
     public:
         /**
-         * map
+         * std::map
          */
         TC_RBTree                  *_pMap;
 

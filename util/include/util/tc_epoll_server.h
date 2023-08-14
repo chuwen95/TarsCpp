@@ -36,8 +36,6 @@
 #include "util/tc_coroutine.h"
 #include "util/tc_openssl.h"
 
-using namespace std;
-
 /**
  * 服务模型说明:
  * - 服务模型全面支持协程化, 一共有四种模式, 可以通过setOpenCoroutine来设置, 这四种模式是:
@@ -81,6 +79,8 @@ using namespace std;
  */
 namespace tars
 {
+using namespace std;
+
 class PropertyReport;
 
 namespace detail
@@ -2275,7 +2275,7 @@ public:
      *
      * @return map<int,ListenSocket>
      */
-    unordered_map<int, BindAdapterPtr> getListenSocketInfo();
+    std::unordered_map<int, BindAdapterPtr> getListenSocketInfo();
 
     /**
      * 获取所有连接的数目
@@ -2458,7 +2458,7 @@ private:
     /**
      * 监听socket
      */
-    unordered_map<int, BindAdapterPtr> _listeners;
+    std::unordered_map<int, BindAdapterPtr> _listeners;
 
     /**
      * 协程池大小

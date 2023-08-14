@@ -27,10 +27,11 @@
 #include <mutex>
 #include <functional>
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 /////////////////////////////////////////////////
 /**
  * @file tc_timeout_queue.h
@@ -49,8 +50,8 @@ public:
 
     struct NodeInfo;
 
-    // typedef map<uint32_t, PtrInfo> data_type;
-    typedef unordered_map<uint32_t, PtrInfo> data_type;
+    // typedef std::map<uint32_t, PtrInfo> data_type;
+    typedef std::unordered_map<uint32_t, PtrInfo> data_type;
 
     typedef list<NodeInfo>         time_type;
 

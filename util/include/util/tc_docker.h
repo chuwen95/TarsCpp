@@ -12,10 +12,11 @@
 #include "util/tc_autoptr.h"
 #include "util/tc_json.h"
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 class TC_HttpRequest;
 class TC_HttpResponse;
 
@@ -111,17 +112,17 @@ public:
 	 * @param extends: 扩展参数
 	 * @return
 	 */
-	bool create(const string &name,
-			const string &image,
-			const vector<string> &entrypoint,
-			const vector<string> &commands,
-			const vector<string> &envs,
-			const map<string, string> &mounts,
-			const map<string, pair<string, int>> &ports,
-			const string &restartPolicy,
+	bool create(const std::string &name,
+			const std::string &image,
+			const std::vector<std::string> &entrypoint,
+			const std::vector<std::string> &commands,
+			const std::vector<std::string> &envs,
+			const std::map<std::string, std::string> &mounts,
+			const std::map<std::string, std::pair<std::string, int>> &ports,
+			const std::string &restartPolicy,
 			int maximumRetryCount,
-			const string &networkMode,
-			const string &ipcMode,
+			const std::string &networkMode,
+			const std::string &ipcMode,
 			bool autoRemove,
 			bool privileged);
 

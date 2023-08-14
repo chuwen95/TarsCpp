@@ -43,7 +43,7 @@ Tars2Cpp::Tars2Cpp()
 
 string Tars2Cpp::writeToXml(const TypeIdPtr &pPtr) const
 {
-	ostringstream s;
+	std::ostringstream s;
 	if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
 	{
 		s << TAB << "p->value[\"" << pPtr->getId() << "\"] = " + _namespace+ "::XmlOutput::writeXml((" + _namespace+ "::Int32)" << pPtr->getId() << ", _cdata_format);" << endl;
@@ -105,7 +105,7 @@ string Tars2Cpp::writeToXml(const TypeIdPtr &pPtr) const
 
 string Tars2Cpp::readFromXml(const TypeIdPtr &pPtr, bool bIsRequire) const
 {
-	ostringstream s;
+	std::ostringstream s;
 	if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
 	{
 		s << TAB << "tars::XmlInput::readXml((tars::Int32&)" << pPtr->getId() <<", pObj->value[\"" << pPtr->getId() << "\"]";
@@ -129,7 +129,7 @@ string Tars2Cpp::readFromXml(const TypeIdPtr &pPtr, bool bIsRequire) const
 
 string Tars2Cpp::writeToSql(const TypeIdPtr &pPtr) const
 {
-	ostringstream s;
+	std::ostringstream s;
 	if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
 	{
 		s << TAB << "_mycols[\"" << pPtr->getId() << "\"] = make_pair(tars::TC_Mysql::DB_INT, tars::TC_Common::tostr(" << pPtr->getId() << "));" << endl;
@@ -168,7 +168,7 @@ string Tars2Cpp::writeToSql(const TypeIdPtr &pPtr) const
 
 string Tars2Cpp::readFromSql(const TypeIdPtr &pPtr, bool bIsRequire) const
 {
-	ostringstream s;
+	std::ostringstream s;
 	EnumPtr ePtr = EnumPtr::dynamicCast(pPtr->getTypePtr());
 	if(ePtr)
 	{

@@ -43,7 +43,7 @@ public:
 	/**
 	 * @brief  buffer
 	 */
-	vector<char>& buffer() { return _buff; }
+	std::vector<char>& buffer() { return _buff; }
 
 	/**
 	 * buffer
@@ -160,7 +160,7 @@ protected:
 
 	TC_ThreadMutex _nghttpLock;
 
-	unordered_map<int32_t, shared_ptr<Http2Context>>  _context;
+	std::unordered_map<int32_t, shared_ptr<Http2Context>>  _context;
 
 	vector<shared_ptr<Http2Context>>  _contextFinished;
 

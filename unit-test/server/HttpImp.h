@@ -6,11 +6,8 @@
 #include <vector>
 #include "servant/Application.h"
 
-using namespace std;
-using namespace tars;
-
 /////////////////////////////////////////////////////////////////////////
-class HttpImp : public Servant {
+class HttpImp : public tars::Servant {
 
 public:
     /**

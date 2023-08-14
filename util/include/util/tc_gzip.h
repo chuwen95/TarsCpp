@@ -25,10 +25,11 @@
 #include <cassert>
 #include <memory>
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 /////////////////////////////////////////////////
 /** 
 * @file tc_gzip.h 
@@ -80,7 +81,7 @@ public:
     * @return bool       成功失败
     * @return bool       sucessfull or failed
     */
-    static bool compress(const char *src, size_t length, vector<char>& buffer);
+    static bool compress(const char *src, size_t length, std::vector<char>& buffer);
 
     /**
     * @brief  对数据进行压缩

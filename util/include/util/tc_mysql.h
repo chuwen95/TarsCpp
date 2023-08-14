@@ -133,9 +133,9 @@ struct TC_DBConf
     *        dbport:端口
     *        dbport:port
     */
-    void loadFromMap(const map<string, string> &mpParam)
+    void loadFromMap(const std::map<std::string, std::string> &mpParam)
     {
-        map<string, string> mpTmp = mpParam;
+        std::map<std::string, std::string> mpTmp = mpParam;
 
         _host               = mpTmp["dbhost"];
         _user               = mpTmp["dbuser"];
@@ -337,7 +337,7 @@ public:
          *  
          * @param record
          */
-        MysqlRecord(const map<string, string> &record);
+        MysqlRecord(const std::map<std::string, std::string> &record);
 
         /**
          * @brief 获取数据，s一般是指数据表的某个字段名 
@@ -349,7 +349,7 @@ public:
          */
         const string& operator[](const string &s);
     protected:
-        const map<string, string> &_record;
+        const std::map<std::string, std::string> &_record;
     };
 
     /**
@@ -365,7 +365,7 @@ public:
          * 
          * @return vector<map<string,string>>&
          */
-        vector<map<string, string> >& data();
+        std::vector<std::map<std::string, std::string> >& data();
 
         /**
          * 数据的记录条数
@@ -387,7 +387,7 @@ public:
         MysqlRecord operator[](size_t i);
 
     protected:
-        vector<map<string, string> > _data;
+        std::vector<std::map<std::string, std::string> > _data;
     };
 
     /**
@@ -412,7 +412,7 @@ public:
     * @return MysqlData类型的数据，可以根据字段获取相关信息
     * @return MysqlData type of data, you can get information based on the field
     */
-    size_t travelRecord(const string& sSql, const std::function<void(const map<string,string> &)> & pdatarsunc);
+    size_t travelRecord(const std::string& sSql, const std::function<void(const std::map<std::string,std::string> &)> & pdatarsunc);
 
     /**
      * @brief 定义字段类型， 
@@ -432,7 +432,7 @@ public:
      * 数据记录
      * Data Rercord
      */
-    typedef map<string, pair<FT, string> > RECORD_DATA;
+    typedef std::map<std::string, std::pair<FT, std::string> > RECORD_DATA;
 
     /**
     * @brief 更新记录. 

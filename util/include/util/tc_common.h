@@ -47,8 +47,6 @@
 #include <thread>
 #include <memory>
 
-using namespace std;
-
 #if TARGET_PLATFORM_WINDOWS
 
 #ifndef ssize_t
@@ -59,6 +57,9 @@ using namespace std;
 
 namespace tars
 {
+
+using namespace std;
+
 /////////////////////////////////////////////////
 /**
 * @file tc_common.h
@@ -154,7 +155,7 @@ public:
     template<typename K, typename V, typename D, typename A , typename E=double>
     static bool equal(const map<K, V, D, A>& mx , const map<K, V, D, A>& my, E epsilon = _EPSILON_DOUBLE);
 	template<typename K, typename V, typename D, typename A , typename E=double>
-	static bool equal(const unordered_map<K, V, D, A>& mx , const unordered_map<K, V, D, A>& my, E epsilon = _EPSILON_DOUBLE);
+	static bool equal(const std::unordered_map<K, V, D, A>& mx , const std::unordered_map<K, V, D, A>& my, E epsilon = _EPSILON_DOUBLE);
 
     /**
      * 固定宽度填充字符串, 用于输出对齐格式用(默认右填充)
@@ -520,9 +521,9 @@ public:
     * @return  the converted string
     */
     template<typename T>
-    inline static string tostr(const T &t)
+    inline static std::string tostr(const T &t)
     {
-        ostringstream sBuffer;
+        std::ostringstream sBuffer;
         sBuffer << t;
         return sBuffer.str();
     }
@@ -573,7 +574,7 @@ public:
      * @return                    output string 
      */
     template<typename K, typename V, typename D, typename P, typename A>
-    static string tostr(const unordered_map<K, V, D, P, A> &t);
+    static std::string tostr(const std::unordered_map<K, V, D, P, A> &t);
 
     /**
     * @brief  pair 转化为字符串，保证map等关系容器可以直接用tostr来输出
@@ -1278,10 +1279,10 @@ string TC_Common::tostr(const multimap<K, V, D, A> &t)
 }
 
 template<typename K, typename V, typename D, typename P, typename A>
-string TC_Common::tostr(const unordered_map<K, V, D, P, A> &t)
+std::string TC_Common::tostr(const std::unordered_map<K, V, D, P, A> &t)
 {
     string sBuffer;
-    typename unordered_map<K, V, D, P, A>::const_iterator it = t.begin();
+    typename std::unordered_map<K, V, D, P, A>::const_iterator it = t.begin();
     while (it != t.end()) {
         sBuffer += " [";
         sBuffer += tostr(it->first);
@@ -1387,7 +1388,7 @@ bool TC_Common::equal(const map<K, V, D, A>& mx, const map<K, V, D, A>& my, E ep
 }
 
 template<typename K, typename V, typename D, typename A , typename E>
-bool TC_Common::equal(const unordered_map<K, V, D, A>& mx , const unordered_map<K, V, D, A>& my, E epsilon)
+bool TC_Common::equal(const std::unordered_map<K, V, D, A>& mx , const std::unordered_map<K, V, D, A>& my, E epsilon)
 {
 	auto first1= mx.begin();
 	auto last1 = mx.end();

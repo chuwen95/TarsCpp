@@ -21,10 +21,11 @@
 #include <vector>
 #include <string>
 #include <sstream>
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 /////////////////////////////////////////////////
 /** 
  * @file tc_option.h 
@@ -100,7 +101,7 @@ public:
      * @return map<string,string> map类型的标识和参数值的对应关系
      * @return Map<string, string> map type identity and corresponding relationship to parameter values
      */
-    const map<string, string>& getMulti() const;
+    const std::map<std::string, std::string>& getMulti() const;
 
     /**
      * @brief 获取所有普通的参数, 例子中的abc, 
@@ -119,7 +120,7 @@ public:
      * @return map<string,string> map类型的标识和参数值的对应关系
      * @return Map<string, string> map type identity and corresponding relationship to parameter values
      */
-    map<string, string>& getMulti();
+    std::map<std::string, std::string>& getMulti();
 
     /**
      * @brief 获取所有普通的参数, 例子中的abc, 

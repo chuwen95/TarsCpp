@@ -32,10 +32,10 @@ typedef unsigned short mode_t;
 #include <mutex>
 #include <unordered_map>
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
 
 /**
 * @brief 跨平台port异常类
@@ -220,7 +220,7 @@ protected:
 	{
 		std::mutex   _mutex;
 
-		unordered_map<int, unordered_map<size_t, std::function<void()>>> _callbacks;
+		std::unordered_map<int, std::unordered_map<size_t, std::function<void()>>> _callbacks;
 
 		std::atomic<size_t> _callbackId{0};
 	};

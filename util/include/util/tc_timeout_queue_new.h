@@ -29,10 +29,11 @@
 // #include "util/tc_functor.h"
 #include "util/tc_timeprovider.h"
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 /////////////////////////////////////////////////
 /**
  * @file tc_timeout_queue_new.h
@@ -50,9 +51,9 @@ public:
     struct NodeInfo;
     struct SendInfo;
 
-    typedef unordered_map<uint32_t, PtrInfo>     data_type;
-    typedef multimap<int64_t,NodeInfo>      time_type;
-    typedef list<SendInfo>                  send_type;
+    typedef std::unordered_map<uint32_t, PtrInfo>     data_type;
+    typedef std::multimap<int64_t,NodeInfo>      time_type;
+    typedef std::list<SendInfo>                  send_type;
 
     typedef std::function<void(T&)> data_functor;
 

@@ -43,7 +43,7 @@ void TarsParse::setTars(bool bWithTars)
     _bWithTars = bWithTars;
 }
 
-void TarsParse::setHeader(const string &sHeader)
+void TarsParse::setHeader(const std::string &sHeader)
 {
     _sHeader = sHeader;
 }
@@ -53,7 +53,7 @@ void TarsParse::setCurrentPriority(bool bFlag)
 	_bUseCurrentPathFirst = bFlag;
 }
 
-string TarsParse::getHeader()
+std::string TarsParse::getHeader()
 {
     if(_sHeader.empty())
         return _sHeader;
@@ -70,7 +70,7 @@ void TarsParse::clear()
     _namespaces.clear();
 }
 
-void TarsParse::parse(const string& sFileName)
+void TarsParse::parse(const std::string& sFileName)
 {
     if (_bUseCurrentPath)
     {
@@ -87,7 +87,7 @@ void TarsParse::parse(const string& sFileName)
         _contains.push(new Container(""));
         if(!(yyin = fopen(sTemp.c_str(), "r")))
         {
-            error("open file '" + sFileName + "(" + sTemp + ")" + "' error :" + string(strerror(errno)));
+            error("open file '" + sFileName + "(" + sTemp + ")" + "' error :" + std::string(strerror(errno)));
         }
 
         pushFile(sFileName);
@@ -112,7 +112,7 @@ void TarsParse::parse(const string& sFileName)
         _contains.push(new Container(""));
         if(!(yyin = fopen(sTemp.c_str(), "r")))
         {
-            error("open file '" + sFileName + "(" + sTemp + ")" + "' error :" + string(strerror(errno)));
+            error("open file '" + sFileName + "(" + sTemp + ")" + "' error :" + std::string(strerror(errno)));
         }
 
         pushFile(sFileName);
@@ -128,7 +128,7 @@ void TarsParse::parse(const string& sFileName)
         _contains.push(new Container(""));
         if(!(yyin = fopen(sFileName.c_str(), "r")))
         {
-            error("open file '" + sFileName + "' error :" + string(strerror(errno)));
+            error("open file '" + sFileName + "' error :" + std::string(strerror(errno)));
         }
 
         pushFile(sFileName);
@@ -137,7 +137,7 @@ void TarsParse::parse(const string& sFileName)
     }
 }
 
-void TarsParse::pushFile(const string &file)
+void TarsParse::pushFile(const std::string &file)
 {
     ContextPtr c = new Context(file);
     _contexts.push(c);
@@ -151,7 +151,7 @@ ContextPtr TarsParse::popFile()
     return c;
 }
 
-bool TarsParse::getFilePath(const string &s, string &file)
+bool TarsParse::getFilePath(const std::string &s, std::string &file)
 {
     if (_bUseCurrentPath)
     {
@@ -239,7 +239,7 @@ bool TarsParse::getFilePath(const string &s, string &file)
     return true;
 }
 
-string TarsParse::getCurrFileName()
+std::string TarsParse::getCurrFileName()
 {
     return _contexts.top()->getFileName();
 }
@@ -254,13 +254,13 @@ ContextPtr TarsParse::currentContextPtr()
     return _contexts.top();
 }
 
-void TarsParse::error(const string &msg)
+void TarsParse::error(const std::string &msg)
 {
-    cerr <<  _contexts.top()->getFileName() << ": " << _contexts.top()->getCurrLine() << ": error: " << msg << endl;
+    std::cerr <<  _contexts.top()->getFileName() << ": " << _contexts.top()->getCurrLine() << ": error: " << msg << std::endl;
     exit(-1);
 }
 
-int TarsParse::checkKeyword(const string& s)
+int TarsParse::checkKeyword(const std::string& s)
 {
     std::map<std::string, int>::const_iterator it = _keywordMap.find(s);
     if(it != _keywordMap.end())
@@ -270,7 +270,7 @@ int TarsParse::checkKeyword(const string& s)
 
     if(!_bWithTars)
     {
-        string sPrefix = "tars";
+        std::string sPrefix = "tars";
         //不能以tars开头
         if((s.length() >= sPrefix.length()) && (s.substr(0, sPrefix.length()) == sPrefix))
         {
@@ -309,9 +309,9 @@ void TarsParse::initScanner()
     _keywordMap["unsigned"] = TARS_UNSIGNED;
 }
 
-string TarsParse::getTab()
+std::string TarsParse::getTab()
 {
-    ostringstream s;
+    std::ostringstream s;
     for(int i = 0; i < _itab; i++)
     {
         s << "    ";
@@ -340,7 +340,7 @@ void TarsParse::addNamespacePtr(const NamespacePtr &nPtr)
     _namespaces.push_back(nPtr);
 }
 
-NamespacePtr TarsParse::findNamespace(const string &id)
+NamespacePtr TarsParse::findNamespace(const std::string &id)
 {
     for(size_t i = 0; i < _namespaces.size(); i++)
     {
@@ -368,13 +368,13 @@ void TarsParse::addEnumPtr(const EnumPtr &ePtr)
     _enums.push_back(ePtr);
 }
 
-StructPtr TarsParse::findStruct(const string &sid)
+StructPtr TarsParse::findStruct(const std::string &sid)
 {
-    string ssid = sid;
+    std::string ssid = sid;
 
     //在当前namespace中查找
     NamespacePtr np = currentNamespace();
-    if(ssid.find("::") == string::npos)
+    if(ssid.find("::") == std::string::npos)
     {
         ssid = np->getId() + "::" + ssid;
     }
@@ -390,13 +390,13 @@ StructPtr TarsParse::findStruct(const string &sid)
     return NULL;
 }
 
-EnumPtr TarsParse::findEnum(const string &sid)
+EnumPtr TarsParse::findEnum(const std::string &sid)
 {
-    string ssid = sid;
+    std::string ssid = sid;
 
     //在当前namespace中查找
     NamespacePtr np = currentNamespace();
-    if(ssid.find("::") == string::npos)
+    if(ssid.find("::") == std::string::npos)
     {
         ssid = np->getId() + "::" + sid;
     }
@@ -412,11 +412,11 @@ EnumPtr TarsParse::findEnum(const string &sid)
     return NULL;
 }
 
-bool TarsParse::checkEnum(const string &idName)
+bool TarsParse::checkEnum(const std::string &idName)
 {
     for(size_t i = 0; i < _enums.size(); i++)
     {
-        vector<TypeIdPtr> & list = _enums[i]->getAllMemberPtr();
+        std::vector<TypeIdPtr> & list = _enums[i]->getAllMemberPtr();
 	
         for (size_t j = 0; j < list.size(); j++)
         {
@@ -429,7 +429,7 @@ bool TarsParse::checkEnum(const string &idName)
 
     return false;
 }
-void TarsParse::checkConflict(const string &sid)
+void TarsParse::checkConflict(const std::string &sid)
 {
     //是否和枚举重名
     if(findEnum(sid))
@@ -444,7 +444,7 @@ void TarsParse::checkConflict(const string &sid)
     }
 }
 
-TypePtr TarsParse::findUserType(const string &sid)
+TypePtr TarsParse::findUserType(const std::string &sid)
 {
     StructPtr sPtr = findStruct(sid);
     if(sPtr) return sPtr;
@@ -588,30 +588,30 @@ void TarsParse::checkConstValue(TypeIdPtr &tPtr, int c)
     }
 }
 
-string TarsParse::printHeaderRemark()
+std::string TarsParse::printHeaderRemark()
 {
-    ostringstream s;
-    s << "// **********************************************************************" << endl;
-    s << "// This file was generated by a TARS parser!" << endl;
-    s << "// TARS version " << TARS_VERSION << "." << endl;
-    s << "// **********************************************************************" << endl;
-    s << endl;
+    std::ostringstream s;
+    s << "// **********************************************************************" << std::endl;
+    s << "// This file was generated by a TARS parser!" << std::endl;
+    s << "// TARS version " << TARS_VERSION << "." << std::endl;
+    s << "// **********************************************************************" << std::endl;
+    s << std::endl;
 
     return s.str();
 }
 
-string TarsParse::getFileName(const string &fileName)
+std::string TarsParse::getFileName(const std::string &fileName)
 {
-	string tmpFileName = fileName;
-	string::size_type pos = tmpFileName.rfind('/');
-	if(pos != string::npos)
+    std::string tmpFileName = fileName;
+    std::string::size_type pos = tmpFileName.rfind('/');
+	if(pos != std::string::npos)
 	{
 		tmpFileName = tmpFileName.substr(pos + 1);
 	}
 	else
 	{
 		pos = tmpFileName.rfind('\\');
-		if(pos != string::npos)
+		if(pos != std::string::npos)
 		{
 			tmpFileName = tmpFileName.substr(pos + 1);
 		}
@@ -620,12 +620,12 @@ string TarsParse::getFileName(const string &fileName)
 	return tars::TC_File::excludeFileExt(tmpFileName);
 }
 
-string TarsParse::replaceFileName(const string &fileName, const string &ext)
+std::string TarsParse::replaceFileName(const std::string &fileName, const std::string &ext)
 {
 	return tars::TC_File::excludeFileExt(getFileName(fileName)) + "." + ext;
 }
 
-string TarsParse::getAbsoluteFileName(const string &baseDir, const string &fileName)
+std::string TarsParse::getAbsoluteFileName(const std::string &baseDir, const std::string &fileName)
 {
 	return baseDir + FILE_SEP + fileName;
 }

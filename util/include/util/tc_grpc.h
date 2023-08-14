@@ -33,7 +33,7 @@ public:
 	 * @param out
 	 * @return
 	 */
-	int encodeResponse(const shared_ptr<Http2Context> &context, std::string gStatus, vector<char> &out);
+	int encodeResponse(const shared_ptr<Http2Context> &context, std::string gStatus, std::vector<char> &out);
 
 	/**
 	 *
@@ -52,7 +52,7 @@ public:
 protected:
 
     static TC_SpinLock _mutex;
-    static unordered_map<int32_t, shared_ptr<TC_GrpcServer>> _http2;
+    static std::unordered_map<int32_t, shared_ptr<TC_GrpcServer>> _http2;
 };
 
 /////////////////////////////////////////////////////////////////////////////////

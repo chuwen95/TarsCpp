@@ -21,11 +21,11 @@
 #include <string>
 #include <vector>
 #include "util/tc_ex.h"
+namespace tars
+{
 
 using namespace std;
 
-namespace tars
-{
 /////////////////////////////////////////////////
 /** 
  * @file  tc_bitmap.h 

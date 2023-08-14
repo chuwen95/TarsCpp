@@ -21,6 +21,9 @@
 #include "util/tc_common.h"
 #include <string>
 
+using namespace std;
+using namespace tars;
+
 #define TAB     g_parse->getTab()
 #define INC_TAB g_parse->incTab()
 #define DEL_TAB g_parse->delTab()
@@ -41,7 +44,7 @@ Tars2Java::Tars2Java()
 
 string Tars2Java::writeTo(const TypeIdPtr& pPtr) const
 {
-    ostringstream s;
+    std::ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
         s << TAB << "_os.write(" << pPtr->getId() << ", " << pPtr->getTag() << ");" << endl;
@@ -56,7 +59,7 @@ string Tars2Java::writeTo(const TypeIdPtr& pPtr) const
 
 string Tars2Java::readFrom(const TypeIdPtr& pPtr) const
 {
-    ostringstream s;
+    std::ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
         s << TAB << "_is.read((tars::Int32&)" << pPtr->getId();
@@ -73,7 +76,7 @@ string Tars2Java::readFrom(const TypeIdPtr& pPtr) const
 
 string Tars2Java::display(const TypeIdPtr& pPtr) const
 {
-    ostringstream s;
+    std::ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
         s << TAB << "_ds.display((tars::Int32)" << pPtr->getId() << ",\"" << pPtr->getId() << "\");" << endl;;

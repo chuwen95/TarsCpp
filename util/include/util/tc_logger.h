@@ -42,9 +42,10 @@
 #include <sys/syscall.h>
 #endif
 
-using namespace std;
 namespace tars
 {
+
+    using namespace std;
 	/////////////////////////////////////////////////
 	/**
 	 * @file tc_logger.h
@@ -121,8 +122,8 @@ namespace tars
 	*/
 	struct TC_Logger_Exception : public TC_Exception
 	{
-		TC_Logger_Exception(const string &buffer) : TC_Exception(buffer){};
-		TC_Logger_Exception(const string &buffer, int err) : TC_Exception(buffer, err){};
+		TC_Logger_Exception(const std::string &buffer) : TC_Exception(buffer){};
+		TC_Logger_Exception(const std::string &buffer, int err) : TC_Exception(buffer, err){};
 		~TC_Logger_Exception() throw(){};
 	};
 
@@ -264,7 +265,7 @@ namespace tars
 		 * Stained thread ID collection
 		 *
 		 */
-		static unordered_map<size_t, string> _mapThreadID;
+		static std::unordered_map<size_t, std::string> _mapThreadID;
 	};
 
 	typedef TC_AutoPtr<TC_LoggerRoll> TC_LoggerRollPtr;

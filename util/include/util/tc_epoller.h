@@ -129,7 +129,7 @@ public:
 		 * @param callbacks: <EPOLLIN/EPOLLOUT/EPOLLERR, EVENT_CALLBACK>
 		 * @param events: 需要add的事件, 如果为0, 则不add事件
 		 */
-		void registerCallback(const map<uint32_t, EVENT_CALLBACK> & callbacks, uint32_t events);
+		void registerCallback(const std::map<uint32_t, EVENT_CALLBACK> & callbacks, uint32_t events);
 
 		/**
 		 * 清除所有callback

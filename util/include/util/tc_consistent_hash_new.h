@@ -21,7 +21,6 @@
 #include "util/tc_autoptr.h"
 #include "util/tc_hash_fun.h"
 
-
 namespace tars
 {
 
@@ -96,7 +95,7 @@ public:
          *节点名称
          *node name
          */
-        string sNode;
+        std::string sNode;
 
         /**
          *节点下标
@@ -148,7 +147,7 @@ public:
      * @return      是否成功
      * @return      whether it is successfull or not
      */
-    int addNode(const string & node, unsigned int index, int weight = 1);
+    int addNode(const std::string & node, unsigned int index, int weight = 1);
 
     /**
      * @brief 获取某key对应到的节点node的下标.
@@ -161,7 +160,7 @@ public:
      * @return        0:获取成功   -1:没有被添加的节点
      * @return        0:obtain successfully  -1:no nodes added
      */
-    int getIndex(const string & key, unsigned int & iIndex);
+    int getIndex(const std::string & key, unsigned int & iIndex);
 
     /**
      * @brief 获取某key对应到的节点node的名称.
@@ -174,7 +173,7 @@ public:
      * @return        0:获取成功   -1:没有被添加的节点
      * @return        0:obtain successfully  -1:no nodes added
      */
-    int getNodeName(const string & key, string & sNode);
+    int getNodeName(const std::string & key, string & sNode);
 
     /**
      * @brief 获取某hashcode对应到的节点node的下标.
@@ -217,7 +216,7 @@ public:
     void clear() { _vHashList.clear(); }
 
 protected:
-    vector<node_T_new>    _vHashList;
+    std::vector<node_T_new>    _vHashList;
     TC_HashAlgorithmPtr _ptrHashAlg;
 
 };

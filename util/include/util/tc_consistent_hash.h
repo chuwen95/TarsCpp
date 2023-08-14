@@ -19,10 +19,10 @@
 
 #include "util/tc_md5.h"
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
 
 /////////////////////////////////////////////////
 /**
@@ -116,7 +116,7 @@ class  TC_ConsistentHash
         int removeNode(const string & node)
         {
             unsigned iHashCode = hash_md5(TC_MD5::md5bin(node));
-            vector<node_T>::iterator it;
+            std::vector<node_T>::iterator it;
             for(it=vHashList.begin() ; it!=vHashList.end(); it++)
             {
                 if(it->iHashCode == iHashCode)
@@ -189,7 +189,7 @@ class  TC_ConsistentHash
             return (*(int*)(p)) ^ (*(int*)(p+4)) ^ (*(int*)(p+8)) ^ (*(int*)(p+12));
         }
 
-        vector<node_T> vHashList;
+        std::vector<node_T> vHashList;
 
 };
 

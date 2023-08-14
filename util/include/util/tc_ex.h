@@ -48,7 +48,7 @@ public:
 	 * @param buffer 异常的告警信息 
      * @param buffer alert information of exceptions
      */
-	explicit TC_Exception(const string &buffer);
+	explicit TC_Exception(const std::string &buffer);
 
     /**
 	 * @brief 构造函数,提供了一个可以传入errno的构造函数，

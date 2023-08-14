@@ -26,10 +26,10 @@
 
 #include "util/tc_autoptr.h"
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
 
 /**
 * 编解码抛出的异常
@@ -170,7 +170,7 @@ public:
 
 	virtual ~JsonValueObj(){}
 public:
-	unordered_map<string,JsonValuePtr> value;
+	std::unordered_map<std::string,JsonValuePtr> value;
 };
 typedef TC_AutoPtr<JsonValueObj> JsonValueObjPtr;
 

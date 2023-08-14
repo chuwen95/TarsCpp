@@ -65,7 +65,7 @@ bool Builtin::isSimple() const
     return true;
 }
 
-string Builtin::def() const
+std::string Builtin::def() const
 {
     switch(_kind)
     {
@@ -101,7 +101,7 @@ Map::Map(const TypePtr& pleft, const TypePtr& pright): _pleft(pleft), _pright(pr
 
 /*************************************************************************************************/
 
-TypeId::TypeId(const TypePtr& ptr, const string&id)
+TypeId::TypeId(const TypePtr& ptr, const std::string&id)
 : _ptr(ptr)
 , _id(id)
 , _bRequire(true)
@@ -125,7 +125,7 @@ void TypeId::setRequire(int tag)
     _tag        = tag;
 }
 
-void TypeId::setDefault(const string &def)
+void TypeId::setDefault(const std::string &def)
 {
     BuiltinPtr bPtr = BuiltinPtr::dynamicCast(_ptr);
 	EnumPtr    ePtr = EnumPtr::dynamicCast(_ptr);
@@ -150,7 +150,7 @@ void TypeId::setOptional(int tag)
 }
 
 /*************************************************************************************************/
-NamespacePtr Container::createNamespace(const string &id)
+NamespacePtr Container::createNamespace(const std::string &id)
 {
     NamespacePtr np = NamespacePtr::dynamicCast(this);
     if(np)
@@ -184,7 +184,7 @@ ParamDeclPtr Operation::createParamDecl(const TypeIdPtr &typeIdPtr, bool v, bool
 }
 
 /*************************************************************************************************/
-OperationPtr Interface::createOperation(const string &id, const TypePtr &typePtr)
+OperationPtr Interface::createOperation(const std::string &id, const TypePtr &typePtr)
 {
     for(size_t i = 0; i < _ops.size(); i++)
     {
@@ -201,7 +201,7 @@ OperationPtr Interface::createOperation(const string &id, const TypePtr &typePtr
 
 /*************************************************************************************************/
 
-InterfacePtr Namespace::createInterface(const string &id)
+InterfacePtr Namespace::createInterface(const std::string &id)
 {
     for(size_t i = 0; i < _is.size(); i++)
     {
@@ -222,7 +222,7 @@ InterfacePtr Namespace::createInterface(const string &id)
     return _is.back();
 }
 
-StructPtr Namespace::createStruct(const string& id)
+StructPtr Namespace::createStruct(const std::string& id)
 {
     g_parse->checkConflict(_id + "::" + id);
 
@@ -232,7 +232,7 @@ StructPtr Namespace::createStruct(const string& id)
     return _ss.back();
 }
 
-EnumPtr Namespace::createEnum(const string &id)
+EnumPtr Namespace::createEnum(const std::string &id)
 {
     g_parse->checkConflict(_id + "::" + id);
 
@@ -293,7 +293,7 @@ void Struct::addTypeId(const TypeIdPtr &typeIdPtr)
     _members.push_back(typeIdPtr);
 }
 
-void Struct::addKey(const string &member)
+void Struct::addKey(const std::string &member)
 {
     size_t i;
     for(i = 0; i < _members.size(); i++)
@@ -327,7 +327,7 @@ void Enum::addMember(const TypeIdPtr &typeIdPtr)
 
 /***********************************************************************************/
 
-void Context::addInclude(const string &incl)
+void Context::addInclude(const std::string &incl)
 {
     if(incl == _filename)
     {

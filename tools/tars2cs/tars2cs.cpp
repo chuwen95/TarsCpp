@@ -26,6 +26,9 @@
 #define INC_TAB g_parse->incTab()
 #define DEL_TAB g_parse->delTab()
 
+using namespace std;
+using namespace tars;
+
 //////////////////////////////////////////////////////////////////////////////////
 string Tars2Cs::toTypeInit(const TypePtr &pPtr) const
 {
@@ -168,11 +171,11 @@ string Tars2Cs::tostrEnum(const EnumPtr &pPtr) const
 /******************************StructPtr***************************************/
 string Tars2Cs::generateCs(const StructPtr &pPtr, const NamespacePtr &nPtr) const
 {
-    ostringstream s;
+    std::ostringstream s;
     s << g_parse->printHeaderRemark();
 
-    vector<string> key = pPtr->getKey();
-    vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
+    std::vector<std::string> key = pPtr->getKey();
+    std::vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
 
     s << TAB << "using System;"<<endl;
     s << TAB << "namespace "<< nPtr->getId()<< endl;
@@ -291,7 +294,7 @@ void Tars2Cs::generateCs(const vector<EnumPtr> &es,const vector<ConstPtr> &cs,co
     {
         return;
     }
-    ostringstream s;
+    std::ostringstream s;
     s << g_parse->printHeaderRemark();
 
     s << TAB << "using System;"<<endl;

@@ -46,7 +46,7 @@ namespace tars
 */
 struct TC_PackIn_Exception : public TC_Exception
 {
-	TC_PackIn_Exception(const string &buffer) : TC_Exception(buffer){};
+	TC_PackIn_Exception(const std::string &buffer) : TC_Exception(buffer){};
     ~TC_PackIn_Exception() throw(){};
 };
 
@@ -667,10 +667,10 @@ inline TC_PackIn& encode(TC_PackIn& pi, const vector<T> &t)
  * @return TC_PackIn&
  */
 template<typename K, typename V>
-inline TC_PackIn& encode(TC_PackIn& pi, const map<K, V> &t)
+inline TC_PackIn& encode(TC_PackIn& pi, const std::map<K, V> &t)
 {
     encode(pi, (int)t.size());
-    typename map<K, V>::const_iterator it = t.begin();
+    typename std::map<K, V>::const_iterator it = t.begin();
     while(it != t.end())
     {
         encode(pi, it->first);

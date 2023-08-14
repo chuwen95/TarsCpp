@@ -412,8 +412,8 @@ protected:
 class TC_Http
 {
 public:
-	static unordered_map<string, int> HEADER;
-	static unordered_map<int, string> HEADER_REVERSE;
+	static std::unordered_map<std::string, int> HEADER;
+	static std::unordered_map<int, std::string> HEADER_REVERSE;
 
     /**
      * @brief  构造函数
