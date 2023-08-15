@@ -36,26 +36,23 @@
 // #   endif
 // #endif
 
-using namespace std;
-using namespace tars;
-
 namespace tup
 {
 
 //存放tars返回值的key
-const string STATUS_RESULT_CODE = "STATUS_RESULT_CODE";
-const string STATUS_RESULT_DESC = "STATUS_RESULT_DESC"; 
+const std::string STATUS_RESULT_CODE = "STATUS_RESULT_CODE";
+const std::string STATUS_RESULT_DESC = "STATUS_RESULT_DESC";
 
 /////////////////////////////////////////////////////////////////////////////////
 // 属性封装类
 
-template<typename TWriter = BufferWriter, typename TReader = BufferReader,template<typename> class Alloc = std::allocator >
+template<typename TWriter = tars::BufferWriter, typename TReader = tars::BufferReader,template<typename> class Alloc = std::allocator >
         //template<typename> class Alloc = __gnu_cxx::__pool_alloc >
 class UniAttribute
 {
-    typedef vector<char,Alloc<char> > VECTOR_CHAR_TYPE;
-    typedef map<string, VECTOR_CHAR_TYPE, less<string>,Alloc< pair<const string,VECTOR_CHAR_TYPE > > > VECTOR_CHAR_IN_MAP_TYPE;
-    typedef map<string, VECTOR_CHAR_IN_MAP_TYPE, less<string>,Alloc< pair<const string,VECTOR_CHAR_IN_MAP_TYPE > > >   WUP_DATA_TYPE;
+    typedef std::vector<char,Alloc<char> > VECTOR_CHAR_TYPE;
+    typedef std::map<std::string, VECTOR_CHAR_TYPE, std::less<std::string>,Alloc< std::pair<const std::string,VECTOR_CHAR_TYPE > > > VECTOR_CHAR_IN_MAP_TYPE;
+    typedef std::map<std::string, VECTOR_CHAR_IN_MAP_TYPE, std::less<std::string>,Alloc< std::pair<const std::string,VECTOR_CHAR_IN_MAP_TYPE > > >   WUP_DATA_TYPE;
 
 public:
 	/**
@@ -77,7 +74,7 @@ public:
      * @param name:属性名称
      * @param t:   属性值
      */
-    template<typename T> void put(const string& name, const T& t)
+    template<typename T> void put(const std::string& name, const T& t)
     {
         os.reset();
 
@@ -90,7 +87,7 @@ public:
 
     }
 
-    void putUnknown(const string& name, const string& value)
+    void putUnknown(const std::string& name, const std::string& value)
     {
         os.reset();
         os.writeUnknownV2(value);
@@ -100,7 +97,7 @@ public:
         // v.assign(os.getBuffer(), os.getBuffer() + os.getLength());
     }
 
-    void getUnknown(const string& name, string& value)
+    void getUnknown(const std::string& name, std::string& value)
     {
         typename VECTOR_CHAR_IN_MAP_TYPE::iterator mit;
 
@@ -109,11 +106,11 @@ public:
         if (mit != _data.end() && mit->second.size()>2)
         {
             //去掉DataHead::eStructBegin,DataHead::eStructEnd
-            value = string(&mit->second[0]+1, mit->second.size()-2);
+            value = std::string(&mit->second[0]+1, mit->second.size()-2);
             return;
 
         }
-        throw runtime_error(string("UniAttribute not found key:") +  name);
+        throw std::runtime_error(std::string("UniAttribute not found key:") +  name);
     }
 
     /**
@@ -124,7 +121,7 @@ public:
      * @param name:属性名称
      * @param t:   属性值输出参数
      */
-    template<typename T> void get(const string& name, T& t)
+    template<typename T> void get(const std::string& name, T& t)
     {
         typename VECTOR_CHAR_IN_MAP_TYPE::iterator mit;
 
@@ -141,7 +138,7 @@ public:
 	        return;
 
         }
-        throw runtime_error(string("UniAttribute not found key:") +  name);
+        throw std::runtime_error(std::string("UniAttribute not found key:") +  name);
     }
     /**
      * 获取属性值，属性不存在则抛出异常
@@ -151,7 +148,7 @@ public:
      * @param name:属性名称
      * @return T:  属性值
      */
-    template<typename T> T get(const string& name)
+    template<typename T> T get(const std::string& name)
     {
         T t;
 
@@ -167,13 +164,13 @@ public:
      * @param t:  属性值输出参数
      * @param def:     默认值
      */
-    template<typename T> void getByDefault(const string& name, T& t, const T& def)
+    template<typename T> void getByDefault(const std::string& name, T& t, const T& def)
     {
         try
         {
             get<T>(name, t);
         }
-        catch (runtime_error& e)
+        catch (std::runtime_error& e)
         {
             t = def;
         }
@@ -186,7 +183,7 @@ public:
      * @param:     默认值
      * @return T:  属性值
      */
-    template<typename T> T getByDefault(const string& name, const T& def)
+    template<typename T> T getByDefault(const std::string& name, const T& def)
     {
         T t;
 
@@ -207,7 +204,7 @@ public:
      * 
      * @param buff： 编码结果输出参数
      */
-    void encode(string& buff)
+    void encode(std::string& buff)
     {
         os.reset();
 
@@ -221,7 +218,7 @@ public:
      * 
      * @param buff： 编码结果输出参数
      */
-    void encode(vector<char>& buff)
+    void encode(std::vector<char>& buff)
     {
         os.reset();
 
@@ -243,7 +240,7 @@ public:
 
         os.write(_data, 0);
 
-        if(len < os.getLength()) throw runtime_error("encode error, buffer length too short");
+        if(len < os.getLength()) throw std::runtime_error("encode error, buffer length too short");
         memcpy(buff, os.getBuffer(), os.getLength());
         len =  os.getLength();
     }
@@ -271,7 +268,7 @@ public:
      * @throw runtime_error
      * @param buff： 待解码的字节流
      */
-    void decode(const vector<char>& buff)
+    void decode(const std::vector<char>& buff)
     {
         is.reset();
 
@@ -288,7 +285,7 @@ public:
      * 
      * @return const map<string,map<string,vector<char>>>& : 属性map
      */
-    const map<string, vector<char> >& getData() const
+    const std::map<std::string, std::vector<char> >& getData() const
     {
 	    return _data;
     }
@@ -319,7 +316,7 @@ public:
      * @param key:属性名称
      * @return bool:是否存在
      */
-    bool containsKey(const string & key)
+    bool containsKey(const std::string & key)
     {
         return _data.find(key) != _data.end();
     }
@@ -329,15 +326,15 @@ protected:
     short _iVer;
 
 public:
-    TarsInputStream<TReader>     is;
-    TarsOutputStream<TWriter>    os;
+    tars::TarsInputStream<TReader>     is;
+    tars::TarsOutputStream<TWriter>    os;
 };
 
 /////////////////////////////////////////////////////////////////////////////////
 // 请求、回应包封装类
 
-template<typename TWriter = BufferWriter, typename TReader = BufferReader,template<typename> class Alloc = std::allocator >
-struct UniPacket : protected RequestPacket, public UniAttribute<TWriter, TReader, Alloc>
+template<typename TWriter = tars::BufferWriter, typename TReader = tars::BufferReader,template<typename> class Alloc = std::allocator >
+struct UniPacket : protected tars::RequestPacket, public UniAttribute<TWriter, TReader, Alloc>
 {
 public:
     /**
@@ -396,9 +393,9 @@ public:
      * @throw runtime_error
      * @param buff： 编码结果输出参数
      */
-    void encode(string& buff)
+    void encode(std::string& buff)
     {
-        encodeBuff<string>(buff);
+        encodeBuff<std::string>(buff);
     }
 
     /**
@@ -407,9 +404,9 @@ public:
      * @throw runtime_error
      * @param buff： 编码结果输出参数
      */
-    void encode(vector<char>& buff)
+    void encode(std::vector<char>& buff)
     {
-        encodeBuff<vector<char>>(buff);
+        encodeBuff<std::vector<char>>(buff);
     }
 
     /**
@@ -420,7 +417,7 @@ public:
      */
     void encode(char* buff, size_t & len)
     {
-        TarsOutputStream<TWriter>& os = UniAttribute<TWriter, TReader>::os;
+        tars::TarsOutputStream<TWriter>& os = UniAttribute<TWriter, TReader>::os;
 
         os.reset();
 
@@ -431,7 +428,7 @@ public:
         writeTo(os);
 
         tars::Int32 iHeaderLen = htonl(sizeof(tars::Int32) + os.getLength());
-        if (len < sizeof(tars::Int32) + os.getLength()) throw runtime_error("encode error, buffer length too short");
+        if (len < sizeof(tars::Int32) + os.getLength()) throw std::runtime_error("encode error, buffer length too short");
 
         memcpy(buff, &iHeaderLen, sizeof(tars::Int32));
         memcpy(buff + sizeof(tars::Int32), os.getBuffer(), os.getLength());
@@ -448,9 +445,9 @@ public:
 
     void decode(const char* buff, size_t len)
     {
-        if(len < sizeof(tars::Int32)) throw runtime_error("packet length too short, first 4 bytes must be buffer length.");
+        if(len < sizeof(tars::Int32)) throw std::runtime_error("packet length too short, first 4 bytes must be buffer length.");
     
-        TarsInputStream<TReader> &is = UniAttribute<TWriter, TReader,Alloc>::is;
+        tars::TarsInputStream<TReader> &is = UniAttribute<TWriter, TReader,Alloc>::is;
 
         is.reset();
 
@@ -510,7 +507,7 @@ protected:
     template<typename T>
     void encodeBuff(T& buff)
     {
-        TarsOutputStream<TWriter>& os = UniAttribute<TWriter, TReader>::os;
+        tars::TarsOutputStream<TWriter>& os = UniAttribute<TWriter, TReader>::os;
 
         os.reset();
 
@@ -537,11 +534,11 @@ protected:
     /**
      * 内部编码
      */
-    void doEncode(TarsOutputStream<TWriter>& os)
+    void doEncode(tars::TarsOutputStream<TWriter>& os)
     {
         //ServantName、FuncName不能为空
-        if (sServantName.empty()) throw runtime_error("ServantName must not be empty");
-        if (sFuncName.empty())    throw runtime_error("FuncName must not be empty");
+        if (sServantName.empty()) throw std::runtime_error("ServantName must not be empty");
+        if (sFuncName.empty())    throw std::runtime_error("FuncName must not be empty");
 
         os.reset();
 
@@ -556,7 +553,7 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////
 // 调用TARS的服务时使用的类
 
-template<typename TWriter = BufferWriter, typename TReader = BufferReader,template<typename> class Alloc = std::allocator>
+template<typename TWriter = tars::BufferWriter, typename TReader = tars::BufferReader,template<typename> class Alloc = std::allocator>
 struct TarsUniPacket: public UniPacket<TWriter, TReader,Alloc>
 {
 public:
@@ -592,19 +589,19 @@ public:
      * 设置参数编码内容
      * @param value
      */
-    void setTarsBuffer(const vector<tars::Char>& value) { this->sBuffer = value; }
+    void setTarsBuffer(const std::vector<tars::Char>& value) { this->sBuffer = value; }
 
     /**
      * 设置上下文
      * @param value
      */
-    void setTarsContext(const map<std::string, std::string>& value) { this->context = value; }
+    void setTarsContext(const std::map<std::string, std::string>& value) { this->context = value; }
 
     /**
      * 设置特殊消息的状态值
      * @param value
      */
-    void setTarsStatus(const map<std::string, std::string>& value) { this->status = value; }
+    void setTarsStatus(const std::map<std::string, std::string>& value) { this->status = value; }
 
     /**
      * 获取协议版本
@@ -634,19 +631,19 @@ public:
      * 获取参数编码后内容
      * @return const vector<tars::Char>&
      */
-    const vector<tars::Char>& getTarsBuffer() const { return this->sBuffer; }
+    const std::vector<tars::Char>& getTarsBuffer() const { return this->sBuffer; }
 
     /**
      * 获取上下文信息
      * @return const map<std::string,std::string>&
      */
-    const map<std::string, std::string>& getTarsContext() const { return this->context; }
+    const std::map<std::string, std::string>& getTarsContext() const { return this->context; }
 
     /**
      * 获取特殊消息的状态值
      * @return const map<std::string,std::string>&
      */
-    const map<std::string, std::string>& getTarsStatus() const { return this->status; }
+    const std::map<std::string, std::string>& getTarsStatus() const { return this->status; }
 
     /**
      * 获取调用tars的返回值
@@ -655,7 +652,7 @@ public:
      */
     tars::Int32 getTarsResultCode() const
     {
-        map<std::string, std::string>::const_iterator it;
+        std::map<std::string, std::string>::const_iterator it;
         if((it = this->status.find(STATUS_RESULT_CODE)) == this->status.end())
         {
             return 0;
@@ -671,9 +668,9 @@ public:
      * 
      * @retrun string
      */
-    string getTarsResultDesc() const
+    std::string getTarsResultDesc() const
     {
-        map<std::string, std::string>::const_iterator it;
+        std::map<std::string, std::string>::const_iterator it;
         if((it = this->status.find(STATUS_RESULT_DESC)) == this->status.end())
         {
             return "";

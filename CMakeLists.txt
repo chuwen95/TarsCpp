@@ -20,20 +20,6 @@ if("${TARS_CPP_COMMON}" STREQUAL "")
 
 endif()
 
-include(FetchContent)
-if (NOT DEFINED URL_BASE)
-    set(URL_BASE "github.com")
-    # set(URL_BASE "github.com.cnpmjs.org")
-endif()
-set(TARS_PROTOCOL tarsprotocol)
-set(TARS_PROTOCOL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/servant/protocol)
-FetchContent_Declare(${TARS_PROTOCOL}
-        GIT_REPOSITORY https://${URL_BASE}/chuwen95/TarsProtocol.git
-        GIT_TAG 7bee57b7aa6b5789bab3f3e370e843f67db0144b
-        SOURCE_DIR ${TARS_PROTOCOL_PATH}
-        )
-FetchContent_MakeAvailable(${TARS_PROTOCOL})
-
 # set(major "")
 # set(minor "")
 # set(patch "")

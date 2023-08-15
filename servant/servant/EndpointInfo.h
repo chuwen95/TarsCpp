@@ -27,11 +27,12 @@
 #include <WS2tcpip.h>
 #endif
 
-using namespace std;
-
 namespace tars
 {
-/**
+
+using namespace std;
+
+    /**
  * 地址信息IP:Port
  */
 class EndpointInfo

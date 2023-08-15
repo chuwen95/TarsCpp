@@ -12,10 +12,11 @@
 #include "util/tc_autoptr.h"
 #include "util/tc_json.h"
 
-using namespace std;
-
 namespace tars
 {
+
+using namespace std;
+
 class TC_HttpRequest;
 class TC_HttpResponse;
 

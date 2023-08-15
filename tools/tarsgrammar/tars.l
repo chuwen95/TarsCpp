@@ -41,7 +41,7 @@ extern "C"
 struct include_file_state
 {
     YY_BUFFER_STATE state;
-    string file;
+    std::string file;
 };
 
 #define MAX_INCLUDE_DEPTH 200
@@ -74,7 +74,7 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
         g_parse->error("Includes nested too deeply" );
     }
 
-    string file;
+    std::string file;
     bool b = g_parse->getFilePath( yytext, file);
     g_parse->currentContextPtr()->addInclude(file);
 
@@ -139,7 +139,7 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
 "/*" {
     // C comment
     bool e = false;
-    string comment = yytext + 2;
+    std::string comment = yytext + 2;
     while(!e)
     {
         int input = yyinput();
@@ -226,28 +226,28 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
     	    }
     	    case '\\':
     	    {
-    	        static string specialChars = "nrtvfab?";
-    	        static string octalChars = "0123";
+    	        static std::string specialChars = "nrtvfab?";
+    	        static std::string octalChars = "0123";
     	        
     	        char nextInput = static_cast<char>(yyinput());
     	        if(nextInput == '\\' || nextInput == '"' || nextInput == '\'')
     	        {
     	            str->v += nextInput;
     	        }
-    	        else if(specialChars.find(nextInput) != string::npos)
+    	        else if(specialChars.find(nextInput) != std::string::npos)
                 {
                     str->v += '\\';
                     str->v += nextInput;
                 }
-                else if(octalChars.find(nextInput) != string::npos)
+                else if(octalChars.find(nextInput) != std::string::npos)
                 {
-                    static string octalDigits = "01234567";
+                    static std::string octalDigits = "01234567";
                     
                     unsigned short us = nextInput - '0';
-                    if(octalDigits.find_first_of(nextInput = static_cast<char>(yyinput())) != string::npos)
+                    if(octalDigits.find_first_of(nextInput = static_cast<char>(yyinput())) != std::string::npos)
                     {
                         us = us * 8 + nextInput - '0';
-                        if(octalDigits.find_first_of(nextInput = static_cast<char>(yyinput())) != string::npos)
+                        if(octalDigits.find_first_of(nextInput = static_cast<char>(yyinput())) != std::string::npos)
                         {
                             us = us * 8 + nextInput - '0';
                         }
@@ -318,7 +318,7 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
     IntergerGrammarPtr ptr = new IntergerGrammar;
     yylval = ptr;
     
-    string value = yytext;
+    std::string value = yytext;
     const char* beg = value.c_str();
     char* e = 0;
 
@@ -326,7 +326,7 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
     if(!(errno == 0 && beg != e))
     {
         assert(ptr->v != 0);
-        string err = "integer constant `";
+        std::string err = "integer constant `";
         err += value;
         err += "' out of range";
         g_parse->error(err);
@@ -340,7 +340,7 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
     FloatGrammarPtr ptr = new FloatGrammar;
     yylval = ptr;
     
-    string value(yytext);
+    std::string value(yytext);
     
     char lastChar = value[value.size() - 1];
     if(lastChar == 'f' || lastChar == 'F')
@@ -351,14 +351,14 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
     ptr->v = strtod(value.c_str(), 0);
     if((errno == ERANGE) && (ptr->v == HUGE_VAL || ptr->v == -HUGE_VAL))
     {
-        string err = "float point constant `";
+        std::string err = "float point constant `";
         err += value;
         err += "' too large (overflow)";
         g_parse->error(err);
     }
     else if(errno == ERANGE && ptr->v == 0)
     {
-        string err = "float point constant `";
+        std::string err = "float point constant `";
         err += value;
         err += "' too small (underflow)";
         g_parse->error(err);
@@ -376,11 +376,11 @@ tars_const_float         (({tars_float_literal}{tars_float_exp}?)|((\+|-)?[[:dig
 {tars_anychar}       {
     if(yytext[0] < 32 || yytext[0] > 126)
     {
-        stringstream s;
+        std::stringstream s;
         s << "illegal input character: '\\";
         s.width(3);
         s.fill('0');
-        s << oct << static_cast<int>(static_cast<unsigned char>(yytext[0]));
+        s << std::oct << static_cast<int>(static_cast<unsigned char>(yytext[0]));
         s << "'";
         
         g_parse->error(s.str());

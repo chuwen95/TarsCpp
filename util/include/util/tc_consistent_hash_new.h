@@ -21,9 +21,10 @@
 #include "util/tc_autoptr.h"
 #include "util/tc_hash_fun.h"
 
-
 namespace tars
 {
+
+using namespace std;
 
 enum TC_HashAlgorithmType
 {
