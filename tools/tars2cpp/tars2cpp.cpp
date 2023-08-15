@@ -25,6 +25,8 @@
 #define DEL_TAB g_parse->delTab()
 #define G_TRACE_PARAM_OVER_MAX_LEN "\"{\\\"trace_param_over_max_len\\\":true}\""
 
+using namespace std;
+
 //////////////////////////////////////////////////////////////////////////////////
 //
 Tars2Cpp::Tars2Cpp()
@@ -41,7 +43,7 @@ Tars2Cpp::Tars2Cpp()
 
 }
 
-string Tars2Cpp::writeToXml(const TypeIdPtr &pPtr) const
+std::string Tars2Cpp::writeToXml(const TypeIdPtr &pPtr) const
 {
 	ostringstream s;
 	if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -76,11 +78,11 @@ string Tars2Cpp::writeToXml(const TypeIdPtr &pPtr) const
 		}
 		else
 		{
-			string sDefault = pPtr->def();
+            std::string sDefault = pPtr->def();
             BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr->getTypePtr());
 			if (bPtr && bPtr->kind() == Builtin::KindString)
 			{
-				sDefault = "\"" + TC_Common::replace(pPtr->def(), "\"", "\\\"") + "\"";
+				sDefault = "\"" + tars::TC_Common::replace(pPtr->def(), "\"", "\\\"") + "\"";
 			}
 
 			if (mPtr || vPtr)
@@ -103,7 +105,7 @@ string Tars2Cpp::writeToXml(const TypeIdPtr &pPtr) const
 	return s.str();
 }
 
-string Tars2Cpp::readFromXml(const TypeIdPtr &pPtr, bool bIsRequire) const
+std::string Tars2Cpp::readFromXml(const TypeIdPtr &pPtr, bool bIsRequire) const
 {
 	ostringstream s;
 	if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -127,7 +129,7 @@ string Tars2Cpp::readFromXml(const TypeIdPtr &pPtr, bool bIsRequire) const
 	return s.str();
 }
 
-string Tars2Cpp::writeToSql(const TypeIdPtr &pPtr) const
+std::string Tars2Cpp::writeToSql(const TypeIdPtr &pPtr) const
 {
 	ostringstream s;
 	if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -166,13 +168,13 @@ string Tars2Cpp::writeToSql(const TypeIdPtr &pPtr) const
 	return s.str();
 }
 
-string Tars2Cpp::readFromSql(const TypeIdPtr &pPtr, bool bIsRequire) const
+std::string Tars2Cpp::readFromSql(const TypeIdPtr &pPtr, bool bIsRequire) const
 {
 	ostringstream s;
 	EnumPtr ePtr = EnumPtr::dynamicCast(pPtr->getTypePtr());
 	if(ePtr)
 	{
-		s << TAB << pPtr->getId() << " = (" << ePtr->getSid() <<")TC_Common::strto<tars::Int32>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+		s << TAB << pPtr->getId() << " = (" << ePtr->getSid() <<")tars::TC_Common::strto<tars::Int32>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 	}
 
 	BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr->getTypePtr());
@@ -181,28 +183,28 @@ string Tars2Cpp::readFromSql(const TypeIdPtr &pPtr, bool bIsRequire) const
 		switch(bPtr->kind())
 		{
 			case Builtin::KindBool:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::Bool>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::Bool>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindByte:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt8" : "Char") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt8" : "Char") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindShort:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt16" : "Short") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt16" : "Short") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindInt:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt32" : "Int32") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt32" : "Int32") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindLong:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt64" : "Int64") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::" << (bPtr->isUnsigned() ? "UInt64" : "Int64") << ">(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindFloat:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::Float>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::Float>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindDouble:
-				s << TAB << pPtr->getId() << " = TC_Common::strto<tars::Double>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::strto<tars::Double>(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			case Builtin::KindString:
-				s << TAB << pPtr->getId() << " = TC_Common::trim(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
+				s << TAB << pPtr->getId() << " = tars::TC_Common::trim(_mysrd[\"" << pPtr->getId() << "\"]);" << endl;
 				break;
 			default:
 				break;
@@ -217,7 +219,7 @@ string Tars2Cpp::readFromSql(const TypeIdPtr &pPtr, bool bIsRequire) const
 }
 
 
-string Tars2Cpp::writeToJson(const TypeIdPtr& pPtr) const
+std::string Tars2Cpp::writeToJson(const TypeIdPtr& pPtr) const
 {
     ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -257,7 +259,7 @@ string Tars2Cpp::writeToJson(const TypeIdPtr& pPtr) const
         }
         else
         {
-            string sDefault = pPtr->def();
+            std::string sDefault = pPtr->def();
 
             BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr->getTypePtr());
             if (bPtr && bPtr->kind() == Builtin::KindString)
@@ -290,7 +292,7 @@ string Tars2Cpp::writeToJson(const TypeIdPtr& pPtr) const
     return s.str();
 }
 
-string Tars2Cpp::readFromJson(const TypeIdPtr& pPtr, bool bIsRequire) const
+std::string Tars2Cpp::readFromJson(const TypeIdPtr& pPtr, bool bIsRequire) const
 {
     ostringstream s;
     // if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -326,7 +328,7 @@ string Tars2Cpp::readFromJson(const TypeIdPtr& pPtr, bool bIsRequire) const
     return s.str();
 }
 
-string Tars2Cpp::writeTo(const TypeIdPtr& pPtr) const
+std::string Tars2Cpp::writeTo(const TypeIdPtr& pPtr) const
 {
     ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -352,7 +354,7 @@ string Tars2Cpp::writeTo(const TypeIdPtr& pPtr) const
         }
         else
         {
-            string sDefault = pPtr->def();
+            std::string sDefault = pPtr->def();
 
             BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr->getTypePtr());
             if (bPtr && bPtr->kind() == Builtin::KindString)
@@ -380,16 +382,16 @@ string Tars2Cpp::writeTo(const TypeIdPtr& pPtr) const
     return s.str();
 }
 
-string Tars2Cpp::readFrom(const TypeIdPtr& pPtr, bool bIsRequire) const
+std::string Tars2Cpp::readFrom(const TypeIdPtr& pPtr, bool bIsRequire) const
 {
     ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
         //枚举强制类型转换在O2编译选项情况下会告警
-        string tmp = _namespace + "::Int32 eTemp" + TC_Common::tostr(pPtr->getTag()) + generateInitValue(pPtr);
+        std::string tmp = _namespace + "::Int32 eTemp" + tars::TC_Common::tostr(pPtr->getTag()) + generateInitValue(pPtr);
 
         s << TAB << tmp << endl;
-        s << TAB << "_is.read(eTemp" << TC_Common::tostr(pPtr->getTag());
+        s << TAB << "_is.read(eTemp" << tars::TC_Common::tostr(pPtr->getTag());
     }
     else if (pPtr->getTypePtr()->isArray())
     {
@@ -410,7 +412,7 @@ string Tars2Cpp::readFrom(const TypeIdPtr& pPtr, bool bIsRequire) const
 
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
-        s << TAB << pPtr->getId() << " = (" << tostr(pPtr->getTypePtr()) << ")eTemp" << TC_Common::tostr(pPtr->getTag()) << ";" << endl;
+        s << TAB << pPtr->getId() << " = (" << tostr(pPtr->getTypePtr()) << ")eTemp" << tars::TC_Common::tostr(pPtr->getTag()) << ";" << endl;
     }
 
     if(pPtr->getTypePtr()->isPointer())
@@ -434,7 +436,7 @@ string Tars2Cpp::readFrom(const TypeIdPtr& pPtr, bool bIsRequire) const
 //     return s.str();
 // }
 
-string Tars2Cpp::display(const TypeIdPtr& pPtr) const
+std::string Tars2Cpp::display(const TypeIdPtr& pPtr) const
 {
     ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -453,7 +455,7 @@ string Tars2Cpp::display(const TypeIdPtr& pPtr) const
     return s.str();
 }
 
-string Tars2Cpp::displaySimple(const TypeIdPtr& pPtr, bool bSep) const
+std::string Tars2Cpp::displaySimple(const TypeIdPtr& pPtr, bool bSep) const
 {
     ostringstream s;
     if (EnumPtr::dynamicCast(pPtr->getTypePtr()))
@@ -482,7 +484,7 @@ string Tars2Cpp::displaySimple(const TypeIdPtr& pPtr, bool bSep) const
 }
 
 
-string Tars2Cpp::generateCollection(const TypeIdPtr& pPtr, bool bSep) const
+std::string Tars2Cpp::generateCollection(const TypeIdPtr& pPtr, bool bSep) const
 {
     ostringstream s;
     if (pPtr->getTypePtr()->isArray())
@@ -520,7 +522,7 @@ int Tars2Cpp::getSuffix(const TypeIdPtr& pPtr) const
 
 /*******************************定长数组坐标********************************/
 
-string Tars2Cpp::toStrSuffix(const TypeIdPtr& pPtr) const
+std::string Tars2Cpp::toStrSuffix(const TypeIdPtr& pPtr) const
 {
     ostringstream s;
 
@@ -534,7 +536,7 @@ string Tars2Cpp::toStrSuffix(const TypeIdPtr& pPtr) const
 }
 /*******************************BuiltinPtr********************************/
 
-string Tars2Cpp::tostr(const TypePtr& pPtr) const
+std::string Tars2Cpp::tostr(const TypePtr& pPtr) const
 {
     BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr);
     if (bPtr) return tostrBuiltin(bPtr);
@@ -557,9 +559,9 @@ string Tars2Cpp::tostr(const TypePtr& pPtr) const
     return "";
 }
 
-string Tars2Cpp::tostrBuiltin(const BuiltinPtr& pPtr) const
+std::string Tars2Cpp::tostrBuiltin(const BuiltinPtr& pPtr) const
 {
-    string s;
+    std::string s;
 
     switch (pPtr->kind())
     {
@@ -606,7 +608,7 @@ string Tars2Cpp::tostrBuiltin(const BuiltinPtr& pPtr) const
     return s;
 }
 /*******************************VectorPtr********************************/
-string Tars2Cpp::tostrVector(const VectorPtr& pPtr) const
+std::string Tars2Cpp::tostrVector(const VectorPtr& pPtr) const
 {
     //数组类型
     if (pPtr->isArray())
@@ -620,7 +622,7 @@ string Tars2Cpp::tostrVector(const VectorPtr& pPtr) const
         return tostr(pPtr->getTypePtr()) + " *";
     }
 
-    string s = Builtin::builtinTable[Builtin::KindVector] + string("<") + tostr(pPtr->getTypePtr());
+    std::string s = Builtin::builtinTable[Builtin::KindVector] + std::string("<") + tostr(pPtr->getTypePtr());
 
     if (MapPtr::dynamicCast(pPtr->getTypePtr()) || VectorPtr::dynamicCast(pPtr->getTypePtr()))
     {
@@ -633,9 +635,9 @@ string Tars2Cpp::tostrVector(const VectorPtr& pPtr) const
     return s;
 }
 /*******************************MapPtr********************************/
-string Tars2Cpp::tostrMap(const MapPtr& pPtr) const
+std::string Tars2Cpp::tostrMap(const MapPtr& pPtr) const
 {
-    string s = Builtin::builtinTable[Builtin::KindMap] + string("<") + tostr(pPtr->getLeftTypePtr()) + ", " + tostr(pPtr->getRightTypePtr());
+    std::string s = Builtin::builtinTable[Builtin::KindMap] + std::string("<") + tostr(pPtr->getLeftTypePtr()) + ", " + tostr(pPtr->getRightTypePtr());
     if (MapPtr::dynamicCast(pPtr->getRightTypePtr()) || VectorPtr::dynamicCast(pPtr->getRightTypePtr()))
     {
         s += " >";
@@ -648,15 +650,15 @@ string Tars2Cpp::tostrMap(const MapPtr& pPtr) const
 }
 
 /*******************************StructPtr********************************/
-string Tars2Cpp::tostrStruct(const StructPtr& pPtr) const
+std::string Tars2Cpp::tostrStruct(const StructPtr& pPtr) const
 {
     return pPtr->getSid();
 }
 
-string Tars2Cpp::MD5(const StructPtr& pPtr) const
+std::string Tars2Cpp::MD5(const StructPtr& pPtr) const
 {
-    string s;
-    vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
+    std::string s;
+    std::vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
     for (size_t j = 0; j < member.size(); j++)
     {
         s += "_" + tostr(member[j]->getTypePtr());
@@ -666,12 +668,12 @@ string Tars2Cpp::MD5(const StructPtr& pPtr) const
 }
 
 /////////////////////////////////////////////////////////////////////
-string Tars2Cpp::tostrEnum(const EnumPtr& pPtr) const
+std::string Tars2Cpp::tostrEnum(const EnumPtr& pPtr) const
 {
     return pPtr->getSid();
 }
 ///////////////////////////////////////////////////////////////////////
-string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) const
+std::string Tars2Cpp::generateH(const StructPtr& pPtr, const std::string& namespaceId) const
 {
     ostringstream s;
 
@@ -682,13 +684,13 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
 
     INC_TAB;
 
-    s << TAB << "static string className()" << endl;
+    s << TAB << "static std::string className()" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
     s << TAB << "return " << "\"" << namespaceId << "." << pPtr->getId() << "\"" << ";" << endl;
     DEL_TAB;
     s << TAB << "}" << endl;
-    s << TAB << "static string MD5()" << endl;
+    s << TAB << "static std::string MD5()" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
     s << TAB << "return " << MD5(pPtr) << ";" << endl;
@@ -701,7 +703,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
     s << TAB << "{" << endl;
     INC_TAB;
     s << TAB << "resetDefautlt();" << endl;
-    vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
+    std::vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
 
 /*
     bool b = false;
@@ -855,7 +857,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
             //string值要转义
             if (bPtr && bPtr->kind() == Builtin::KindString)
             {
-                string tmp = tars::TC_Common::replace(member[j]->def(), "\"", "\\\"");
+                std::string tmp = tars::TC_Common::replace(member[j]->def(), "\"", "\\\"");
                 s << TAB << member[j]->getId() << " = \"" << tmp << "\";" << endl;
             }
             else
@@ -868,10 +870,10 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
             EnumPtr ePtr = EnumPtr::dynamicCast(member[j]->getTypePtr());
             if (ePtr)
             {
-                vector<TypeIdPtr>& eMember = ePtr->getAllMemberPtr();
+                std::vector<TypeIdPtr>& eMember = ePtr->getAllMemberPtr();
                 if (eMember.size() > 0)
                 {
-                    string sid = ePtr->getSid();
+                    std::string sid = ePtr->getSid();
                     s << TAB << member[j]->getId() << " = " << sid.substr(0, sid.find_first_of("::")) << "::" << eMember[0]->getId() << ";" << endl;
                 }
             }
@@ -928,7 +930,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
         DEL_TAB;
         s << TAB << "}" << endl;
 
-        s << TAB << "string writeToJsonString() const" << endl;
+        s << TAB << "std::string writeToJsonString() const" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "return tars::TC_Json::writeValue(writeToJson());" << endl;
@@ -955,7 +957,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
         DEL_TAB;
         s << TAB << "}" << endl;
 
-        s << TAB << "void readFromJsonString(const string & str)" << endl;
+        s << TAB << "void readFromJsonString(const std::string & str)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "readFromJson(tars::TC_Json::getValue(str));" << endl;
@@ -984,7 +986,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
 		DEL_TAB;
 		s << TAB << "}" << endl;
 
-		s << TAB << "string writeToXmlString() const" << endl;
+		s << TAB << "std::string writeToXmlString() const" << endl;
 		s << TAB << "{" << endl;
 		INC_TAB;
 		s << TAB << "return tars::TC_Xml::writeValue(writeToXml());" <<endl;
@@ -1011,7 +1013,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
 		DEL_TAB;
 		s << TAB << "}" << endl;
 
-		s << TAB << "void readFromXmlString(const string & str)" << endl;
+		s << TAB << "void readFromXmlString(const std::string & str)" << endl;
 		s << TAB << "{" << endl;
 		INC_TAB;
 		s << TAB << "readFromXml(tars::TC_Xml::getValue(str));" <<endl;
@@ -1202,7 +1204,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
 
     }
 
-    vector<string> key = pPtr->getKey();
+    std::vector<std::string> key = pPtr->getKey();
     //定义<
     if (key.size() > 0)
     {
@@ -1256,7 +1258,7 @@ string Tars2Cpp::generateH(const StructPtr& pPtr, const string& namespaceId) con
 }
 
 /*******************************ContainerPtr********************************/
-string Tars2Cpp::generateH(const ContainerPtr& pPtr) const
+std::string Tars2Cpp::generateH(const ContainerPtr& pPtr) const
 {
     ostringstream s;
     for (size_t i = 0; i < pPtr->getAllNamespacePtr().size(); i++)
@@ -1268,7 +1270,7 @@ string Tars2Cpp::generateH(const ContainerPtr& pPtr) const
 }
 
 /******************************ParamDeclPtr***************************************/
-string Tars2Cpp::generateH(const ParamDeclPtr& pPtr, bool bRvalueRef) const
+std::string Tars2Cpp::generateH(const ParamDeclPtr& pPtr, bool bRvalueRef) const
 {
     ostringstream s;
 
@@ -1303,7 +1305,7 @@ string Tars2Cpp::generateH(const ParamDeclPtr& pPtr, bool bRvalueRef) const
     return s.str();
 }
 
-string Tars2Cpp::generateOutH(const ParamDeclPtr& pPtr) const
+std::string Tars2Cpp::generateOutH(const ParamDeclPtr& pPtr) const
 {
     if (!pPtr->isOut()) return "";
 
@@ -1324,7 +1326,7 @@ string Tars2Cpp::generateOutH(const ParamDeclPtr& pPtr) const
     return s.str();
 }
 
-string Tars2Cpp::generateParamDecl(const ParamDeclPtr& pPtr) const
+std::string Tars2Cpp::generateParamDecl(const ParamDeclPtr& pPtr) const
 {
     ostringstream s;
 
@@ -1346,7 +1348,7 @@ string Tars2Cpp::generateParamDecl(const ParamDeclPtr& pPtr) const
     return s.str();
 }
 
-string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const string& cn) const
+std::string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const std::string& cn) const
 {
     ostringstream s;
     s << TAB << "if (_msg_->response->iRet != tars::TARSSERVERSUCCESS)" << endl
@@ -1362,7 +1364,7 @@ string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const string& c
 
     s << TAB << _namespace + "::TarsInputStream<" + _namespace + "::BufferReader> _is;" << endl;
     s << endl;
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
 
     s << TAB << "_is.setBuffer(_msg_->response->sBuffer);" << endl;
 
@@ -1386,13 +1388,13 @@ string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const string& c
     // 处理调用链
     if (_bTrace)
     {
-        s << TAB << "ServantProxyThreadData *_pSptd_ = ServantProxyThreadData::getData();" << endl;
+        s << TAB << "tars::ServantProxyThreadData *_pSptd_ = tars::ServantProxyThreadData::getData();" << endl;
         s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
-        s << TAB << "string _trace_param_;" << endl;
-        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(ServantProxyThreadData::TraceContext::EST_CR, _is.size());" << endl;
-        s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+        s << TAB << "std::string _trace_param_;" << endl;
+        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_CR, _is.size());" << endl;
+        s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -1410,21 +1412,21 @@ string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const string& c
         s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
-        s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+        s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
 
-        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_CR), TRACE_ANNOTATION_CR, \"\", ServerConfig::Application + \".\" + ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_CR), TRACE_ANNOTATION_CR, \"\", tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
         s << endl;
     }
 
     //处理线程私有数据
-    s << TAB << "CallbackThreadData * pCbtd = CallbackThreadData::getData();" << endl;
+    s << TAB << "tars::CallbackThreadData * pCbtd = tars::CallbackThreadData::getData();" << endl;
     s << TAB << "assert(pCbtd != NULL);" << endl;
     s << endl;
     s << TAB << "pCbtd->setResponseContext(_msg_->response->context);" << endl;
@@ -1432,7 +1434,7 @@ string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const string& c
 
     //异步回调都无返回值
     s << TAB << "callback_" << pPtr->getId() << "(";
-    string sParams;
+    std::string sParams;
     if (pPtr->getReturnPtr()->getTypePtr())
     {
         if (pPtr->getReturnPtr()->getTypePtr()->isSimple())
@@ -1471,7 +1473,7 @@ string Tars2Cpp::generateDispatchAsync(const OperationPtr& pPtr, const string& c
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-string Tars2Cpp::generateDispatchCoroAsync(const OperationPtr& pPtr, const string& cn) const
+std::string Tars2Cpp::generateDispatchCoroAsync(const OperationPtr& pPtr, const std::string& cn) const
 {
     ostringstream s;
     s << TAB << "if (_msg_->response->iRet != tars::TARSSERVERSUCCESS)" << endl
@@ -1487,7 +1489,7 @@ string Tars2Cpp::generateDispatchCoroAsync(const OperationPtr& pPtr, const strin
 
     s << TAB << _namespace + "::TarsInputStream<" + _namespace + "::BufferReader> _is;" << endl;
     s << endl;
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
 
     s << TAB << "_is.setBuffer(_msg_->response->sBuffer);" << endl;
 
@@ -1521,7 +1523,7 @@ string Tars2Cpp::generateDispatchCoroAsync(const OperationPtr& pPtr, const strin
 
     //异步回调都无返回值
     s << TAB << "callback_" << pPtr->getId() << "(";
-    string sParams;
+    std::string sParams;
     if (pPtr->getReturnPtr()->getTypePtr())
     {
         if (pPtr->getReturnPtr()->getTypePtr()->isSimple())
@@ -1584,14 +1586,14 @@ string Tars2Cpp::generateDispatchCoroAsync(const OperationPtr& pPtr, const strin
     return s.str();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-string Tars2Cpp::generateHAsync(const OperationPtr& pPtr) const
+std::string Tars2Cpp::generateHAsync(const OperationPtr& pPtr) const
 {
     ostringstream s;
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
     s << TAB << "virtual void " << "callback_" << pPtr->getId() << "(";
 
     bool needRvalueFunc = false;
-    string sParams, sParamsRvalue, sParamsCall;
+    std::string sParams, sParamsRvalue, sParamsCall;
     if (pPtr->getReturnPtr()->getTypePtr())
     {
         if (pPtr->getReturnPtr()->getTypePtr()->isSimple())
@@ -1647,10 +1649,10 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr) const
     return s.str();
 }
 
-string Tars2Cpp::generateInitValue(const TypeIdPtr& pPtr) const
+std::string Tars2Cpp::generateInitValue(const TypeIdPtr& pPtr) const
 {
     BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr->getTypePtr());
-    string init = "";
+    std::string init = "";
     if (bPtr && Builtin::KindBool == bPtr->kind())
     {
         init = " = false";
@@ -1662,15 +1664,15 @@ string Tars2Cpp::generateInitValue(const TypeIdPtr& pPtr) const
     {
         if (pPtr->hasDefault())
         {
-            string sid = ePtr->getSid();
+            std::string sid = ePtr->getSid();
             init = " = " + pPtr->def() + ";";
         }
         else
         {
-            vector<TypeIdPtr>& eMember = ePtr->getAllMemberPtr();
+            std::vector<TypeIdPtr>& eMember = ePtr->getAllMemberPtr();
             if (eMember.size() > 0)
             {
-                string sid = ePtr->getSid();
+                std::string sid = ePtr->getSid();
                 init = " = " + sid.substr(0, sid.find_first_of("::")) + "::" + eMember[0]->getId() + ";";
             }
         }
@@ -1679,13 +1681,13 @@ string Tars2Cpp::generateInitValue(const TypeIdPtr& pPtr) const
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string& cn) const
+std::string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const std::string& cn) const
 {
     ostringstream s;
     s << TAB << _namespace + "::TarsInputStream<" + _namespace + "::BufferReader> _is;" << endl;
     s << TAB << "_is.setBuffer(_current->getRequestBuffer());" << endl;
 
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
 
 //    string routekey;
 
@@ -1701,7 +1703,7 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     }
 
 
-    s << TAB << "if (_current->getRequestVersion() == TUPVERSION)" << endl;
+    s << TAB << "if (_current->getRequestVersion() == tars::TUPVERSION)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
     s << TAB << "tars::UniAttribute<" + _namespace + "::BufferWriterVector, " + _namespace + "::BufferReader>  _tarsAttr_;" << endl;
@@ -1709,8 +1711,8 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     s << TAB << "_tarsAttr_.decode(_current->getRequestBuffer());" << endl;
     for(size_t i = 0; i < vParamDecl.size(); i++)
     {
-        string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
-        string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
+        std::string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
+        std::string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
         if (!vParamDecl[i]->isOut())
         {
             //枚举类型转成int
@@ -1746,14 +1748,14 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     //if (_bJsonSupport && tars::TC_Common::matchPeriod(pPtr->getId(), _vJsonIntf))
     if (_bJsonSupport)
     {
-        s << TAB << "else if (_current->getRequestVersion() == JSONVERSION)" << endl;
+        s << TAB << "else if (_current->getRequestVersion() == tars::JSONVERSION)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << _namespace << "::JsonValueObjPtr _jsonPtr = " << _namespace << "::JsonValueObjPtr::dynamicCast(" << _namespace << "::TC_Json::getValue(_current->getRequestBuffer()));" << endl;
         for(size_t i = 0; i < vParamDecl.size(); i++)
         {
-            string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
-            string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
+            std::string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
+            std::string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
             if (!vParamDecl[i]->isOut())
             {
                 // tars::JsonInput::readJson(uin, _jsonPtr->value["uin"], true); 枚举类型转成int
@@ -1778,7 +1780,7 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
         s << TAB << "tars::XmlValueObjPtr _xmlPtr = tars::XmlValueObjPtr::dynamicCast(tars::TC_Xml::getValue(_current->getRequestBuffer()));" << endl;
         for(size_t i = 0; i < vParamDecl.size(); i++)
 	    {
-		    string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
+            std::string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
 		    if(!vParamDecl[i]->isOut())
 		    {
 			    //枚举类型转成int
@@ -1810,13 +1812,13 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     // 处理调用链
     if (_bTrace)
     {
-        s << TAB << "ServantProxyThreadData *_pSptd_ = ServantProxyThreadData::getData();" << endl;
+        s << TAB << "tars::ServantProxyThreadData *_pSptd_ = tars::ServantProxyThreadData::getData();" << endl;
         s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
-        s << TAB << "string _trace_param_;" << endl;
-        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(ServantProxyThreadData::TraceContext::EST_SR, _is.size());" << endl;
-        s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+        s << TAB << "std::string _trace_param_;" << endl;
+        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_SR, _is.size());" << endl;
+        s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -1828,14 +1830,14 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
         s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
-        s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+        s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
 
-        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_SR), TRACE_ANNOTATION_SR, \"\", ServerConfig::Application + \".\" + ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_SR), TRACE_ANNOTATION_SR, \"\", tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
         s << endl;
@@ -1880,7 +1882,7 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     s << TAB << "{" << endl;
     INC_TAB;
 
-    s << TAB << "if (_current->getRequestVersion() == TUPVERSION)" << endl;
+    s << TAB << "if (_current->getRequestVersion() == tars::TUPVERSION)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
 
@@ -1888,14 +1890,14 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
 	s << TAB << "_tarsAttr_.setVersion(_current->getRequestVersion());" << endl;
     if(pPtr->getReturnPtr()->getTypePtr())
     {
-        string sEnum2Int = (EnumPtr::dynamicCast(pPtr->getReturnPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
+        std::string sEnum2Int = (EnumPtr::dynamicCast(pPtr->getReturnPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
         s << TAB << "_tarsAttr_.put(\"\", " << sEnum2Int << "_ret);" << endl;
         s << TAB << "_tarsAttr_.put(\"tars_ret\", " << sEnum2Int << "_ret);" << endl;
     }
     for (size_t i = 0; i < vParamDecl.size(); i++)
     {
-        string sParamName = vParamDecl[i]->getTypeIdPtr()->getId();
-        string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
+        std::string sParamName = vParamDecl[i]->getTypeIdPtr()->getId();
+        std::string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
         if (vParamDecl[i]->isOut())
         {
             s << TAB << "_tarsAttr_.put(\"" << sParamName << "\", " << sEnum2Int << sParamName << ");" << endl;
@@ -1910,13 +1912,13 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     if (_bJsonSupport)
     //if (_bJsonSupport && tars::TC_Common::matchPeriod(pPtr->getId(), _vJsonIntf))
     {
-        s << TAB << "else if (_current->getRequestVersion() == JSONVERSION)" << endl;
+        s << TAB << "else if (_current->getRequestVersion() == tars::JSONVERSION)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << _namespace << "::JsonValueObjPtr _p = new " << _namespace << "::JsonValueObj();" << endl;
         for(size_t i = 0; i < vParamDecl.size(); i++)
         {
-            string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
+            std::string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
             if (vParamDecl[i]->isOut())
             {
                 s << TAB << "_p->value[\"" << sParamName << "\"] = "<< _namespace << "::JsonOutput::writeJson(" << sParamName << ");" << endl;
@@ -1951,7 +1953,7 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
 
         for(size_t i = 0; i < vParamDecl.size(); i++)
 	    {
-		    string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
+            std::string sParamName =  vParamDecl[i]->getTypeIdPtr()->getId();
 		    if (vParamDecl[i]->isOut())
 		    {
                 s << TAB << "_p->value[\"" << sParamName << "\"] = tars::XmlOutput::writeXml(" << sParamName << ");" << endl;
@@ -2001,9 +2003,9 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
         s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
-        s << TAB << "string _trace_param_;" << endl;
-        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(ServantProxyThreadData::TraceContext::EST_SS, _sResponseBuffer.size());" << endl;
-        s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+        s << TAB << "std::string _trace_param_;" << endl;
+        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_SS, _sResponseBuffer.size());" << endl;
+        s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -2021,13 +2023,13 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
         s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
-        s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+        s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
-        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_SS), TRACE_ANNOTATION_SS, \"\", ServerConfig::Application + \".\" + ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_SS), TRACE_ANNOTATION_SS, \"\", tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
         s << endl;
@@ -2042,7 +2044,7 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
         s << TAB << "else if(_pSptd_ && _pSptd_->_traceCall)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
-        s << TAB << "_current->setTrace(_pSptd_->_traceCall, _pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_SS));" << endl;
+        s << TAB << "_current->setTrace(_pSptd_->_traceCall, _pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_SS));" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
         s << endl;
@@ -2053,15 +2055,15 @@ string Tars2Cpp::generateServantDispatch(const OperationPtr& pPtr, const string&
     return s.str();
 }
 
-string Tars2Cpp::promiseReadFrom(const TypeIdPtr &pPtr, bool bIsRequire) const
+std::string Tars2Cpp::promiseReadFrom(const TypeIdPtr &pPtr, bool bIsRequire) const
 {
     ostringstream s;
     if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
         //枚举强制类型转换在O2编译选项情况下会告警
-        string tmp = _namespace + "::Int32 eTemp" + TC_Common::tostr(pPtr->getTag()) + generateInitValue(pPtr);
+        std::string tmp = _namespace + "::Int32 eTemp" + tars::TC_Common::tostr(pPtr->getTag()) + generateInitValue(pPtr);
         s << TAB << tmp <<endl;
-        s << TAB << "_is.read(eTemp"<<TC_Common::tostr(pPtr->getTag());
+        s << TAB << "_is.read(eTemp"<<tars::TC_Common::tostr(pPtr->getTag());
     }
     else if(pPtr->getTypePtr()->isArray())
     {
@@ -2079,7 +2081,7 @@ string Tars2Cpp::promiseReadFrom(const TypeIdPtr &pPtr, bool bIsRequire) const
     s << ", " << pPtr->getTag() << ", " << ((pPtr->isRequire() && bIsRequire)?"true":"false") << ");" << endl;
     if(EnumPtr::dynamicCast(pPtr->getTypePtr()))
     {
-        s << TAB << "ptr->" << pPtr->getId() << " = (" <<tostr(pPtr->getTypePtr()) <<")eTemp"<<TC_Common::tostr(pPtr->getTag())<<";"<<endl;
+        s << TAB << "ptr->" << pPtr->getId() << " = (" <<tostr(pPtr->getTypePtr()) <<")eTemp"<<tars::TC_Common::tostr(pPtr->getTag())<<";"<<endl;
     }
     if(pPtr->getTypePtr()->isPointer())
     s << TAB <<"_is.mapBufferSkip("<<pPtr->getId() << "Len);"<<endl;
@@ -2089,7 +2091,7 @@ string Tars2Cpp::promiseReadFrom(const TypeIdPtr &pPtr, bool bIsRequire) const
 bool Tars2Cpp::isPromiseDispatchInitValue(const TypeIdPtr &pPtr) const
 {
     BuiltinPtr bPtr = BuiltinPtr::dynamicCast(pPtr->getTypePtr());
-    string init = "";
+    std::string init = "";
     if(bPtr && Builtin::KindBool == bPtr->kind())
     {
         return true;
@@ -2104,7 +2106,7 @@ bool Tars2Cpp::isPromiseDispatchInitValue(const TypeIdPtr &pPtr) const
         }
         else
         {
-            vector<TypeIdPtr>& eMember = ePtr->getAllMemberPtr();
+            std::vector<TypeIdPtr>& eMember = ePtr->getAllMemberPtr();
             if(eMember.size() > 0)
             {
                 return true;
@@ -2113,16 +2115,16 @@ bool Tars2Cpp::isPromiseDispatchInitValue(const TypeIdPtr &pPtr) const
     }
     return false;
 }
-string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) const
+std::string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const std::string& cn) const
 {
     ostringstream s;
     //生成函数声明
     s << TAB << "void async_" << pPtr->getId() << "(";
     s << cn << "PrxCallbackPtr callback,";
 
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
 
-    string routekey = "";
+    std::string routekey = "";
 
     for (size_t i = 0; i < vParamDecl.size(); i++)
     {
@@ -2136,7 +2138,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
             routekey = vParamDecl[i]->getTypeIdPtr()->getId();
         }
     }
-    s << "const map<string, string>& context = TARS_CONTEXT())";
+    s << "const std::map<std::string, std::string>& context = TARS_CONTEXT())";
     s << endl;
 
     s << TAB << "{" << endl;
@@ -2158,7 +2160,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
         s << writeTo(vParamDecl[i]->getTypeIdPtr());
     }
 
-    s << TAB << "std::map<string, string> _mStatus;" << endl;
+    s << TAB << "std::map<std::string, std::string> _mStatus;" << endl;
 
     if (!routekey.empty())
     {
@@ -2172,14 +2174,14 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
      // 处理调用链
     if (_bTrace)
     {
-        s << TAB << "ServantProxyThreadData *_pSptd_ = ServantProxyThreadData::getData();" << endl;
+        s << TAB << "tars::ServantProxyThreadData *_pSptd_ = tars::ServantProxyThreadData::getData();" << endl;
         s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "_pSptd_->newSpan();" << endl;
-        s << TAB << "string _trace_param_;" << endl;
-        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(ServantProxyThreadData::TraceContext::EST_CS, _os.getLength());" << endl; 
-        s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+        s << TAB << "std::string _trace_param_;" << endl;
+        s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_CS, _os.getLength());" << endl;
+        s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -2191,13 +2193,13 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
         s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
-        s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+        s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
         s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
-        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_CS), TRACE_ANNOTATION_CS, ServerConfig::Application + \".\" + ServerConfig::ServerName, tars_name(), \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+        s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_CS), TRACE_ANNOTATION_CS, tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, tars_name(), \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
         DEL_TAB;
         s << TAB << "}" << endl;
     }
@@ -2207,7 +2209,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
     s << TAB << "}" << endl;
     s << TAB << endl;
    //promise异步的函数声明
-   string sStruct = pPtr->getId();
+    std::string sStruct = pPtr->getId();
     s << TAB << "tars::Future< " << cn <<"PrxCallbackPromise::Promise" << sStruct << "Ptr > promise_async_" << pPtr->getId() << "(";
     for(size_t i = 0; i < vParamDecl.size(); i++)
     {
@@ -2216,7 +2218,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
             s << generateParamDecl(vParamDecl[i]) << ",";
         }
     }
-    s << "const map<string, string>& context)" << endl;
+    s << "const std::map<std::string, std::string>& context)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
     if (_tarsMaster)
@@ -2235,7 +2237,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
         }
         s << writeTo(vParamDecl[i]->getTypeIdPtr());
     }
-    s << TAB << "std::map<string, string> _mStatus;" << endl;
+    s << TAB << "std::map<std::string, std::string> _mStatus;" << endl;
     if (!routekey.empty())
     {
         ostringstream os;
@@ -2261,7 +2263,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
             s << generateParamDecl(vParamDecl[i]) << ",";
         }
     }
-    s << "const map<string, string>& context = TARS_CONTEXT())";
+    s << "const std::map<std::string, std::string>& context = TARS_CONTEXT())";
     s << endl;
 
     s << TAB << "{" << endl;
@@ -2283,7 +2285,7 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
         s << writeTo(vParamDecl[i]->getTypeIdPtr());
     }
 
-    s << TAB << "std::map<string, string> _mStatus;" << endl;
+    s << TAB << "std::map<std::string, std::string> _mStatus;" << endl;
     if (!routekey.empty())
     {
         ostringstream os;
@@ -2301,12 +2303,12 @@ string Tars2Cpp::generateHAsync(const OperationPtr& pPtr, const string& cn) cons
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string& interfaceId) const
+std::string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const std::string& interfaceId) const
 {
     ostringstream s, sRvalue;
-    string sParamsCall;
+    std::string sParamsCall;
     bool needRvalue = false;
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
 
     s << TAB;
 
@@ -2315,7 +2317,7 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
     s << tostr(pPtr->getReturnPtr()->getTypePtr()) << " " << pPtr->getId() << "(";
     sRvalue << tostr(pPtr->getReturnPtr()->getTypePtr()) << " " << pPtr->getId() << "(";
 
-    string routekey = "";
+    std::string routekey = "";
     for (size_t i = 0; i < vParamDecl.size(); i++)
     {
         s << generateH(vParamDecl[i], false) << ",";
@@ -2342,7 +2344,7 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
     }
     else
     {
-        s << "const map<string, string> &context = TARS_CONTEXT(),map<string, string> * pResponseContext = NULL)";
+        s << "const std::map<std::string, std::string> &context = TARS_CONTEXT(),std::map<std::string, std::string> * pResponseContext = NULL)";
 
         s << endl;
 
@@ -2368,14 +2370,14 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
         // 处理调用链
         if (_bTrace)
         {
-            s << TAB << "ServantProxyThreadData *_pSptd_ = ServantProxyThreadData::getData();" << endl;
+            s << TAB << "tars::ServantProxyThreadData *_pSptd_ = tars::ServantProxyThreadData::getData();" << endl;
             s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
             s << TAB << "_pSptd_->newSpan();" << endl;
-            s << TAB << "string _trace_param_;" << endl;
-            s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(ServantProxyThreadData::TraceContext::EST_CS, _os.getLength());" << endl;
-            s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+            s << TAB << "std::string _trace_param_;" << endl;
+            s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_CS, _os.getLength());" << endl;
+            s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
             s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -2387,20 +2389,20 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
             s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
             DEL_TAB;
             s << TAB << "}" << endl;
-            s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+            s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
             s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
             DEL_TAB;
             s << TAB << "}" << endl;
-            s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_CS), TRACE_ANNOTATION_CS, ServerConfig::Application + \".\" + ServerConfig::ServerName, tars_name(), \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+            s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_CS), TRACE_ANNOTATION_CS, tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, tars_name(), \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
             DEL_TAB;
             s << TAB << "}" << endl;
             s << endl;
         }
 
 
-        s << TAB << "std::map<string, string> _mStatus;" << endl;
+        s << TAB << "std::map<std::string, std::string> _mStatus;" << endl;
 
         if (!routekey.empty())
         {
@@ -2446,9 +2448,9 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
                 s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
                 s << TAB << "{" << endl;
                 INC_TAB;
-                s << TAB << "string _trace_param_;" << endl;
-                s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(ServantProxyThreadData::TraceContext::EST_CR, _is.size());" << endl;
-                s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+                s << TAB << "std::string _trace_param_;" << endl;
+                s << TAB << "int _trace_param_flag_ = _pSptd_->needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_CR, _is.size());" << endl;
+                s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
                 s << TAB << "{" << endl;
                 INC_TAB;
                 s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -2466,13 +2468,13 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
                 s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
                 DEL_TAB;
                 s << TAB << "}" << endl;
-                s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+                s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
                 s << TAB << "{" << endl;
                 INC_TAB;
                 s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
                 DEL_TAB;
                 s << TAB << "}" << endl;
-                s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_CR), TRACE_ANNOTATION_CR, ServerConfig::Application + \".\" + ServerConfig::ServerName, tars_name(), \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+                s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_CR), TRACE_ANNOTATION_CR, tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, tars_name(), \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
                 DEL_TAB;
                 s << TAB << "}" << endl;
                 s << endl;
@@ -2489,7 +2491,7 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
             s << TAB << "if (_pSptd_ && _pSptd_->_traceCall)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
-            s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(ServantProxyThreadData::TraceContext::EST_CR), TRACE_ANNOTATION_CR, \"\", \"\", \"" << pPtr->getId() << "\", 0, \"\", \"\");" << endl;
+            s << TAB << "TARS_TRACE(_pSptd_->getTraceKey(tars::ServantProxyThreadData::TraceContext::EST_CR), TRACE_ANNOTATION_CR, \"\", \"\", \"" << pPtr->getId() << "\", 0, \"\", \"\");" << endl;
             DEL_TAB;
             s << "}" << endl;
         }
@@ -2535,7 +2537,7 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
             s << TAB << "size_t _rsp_len_ = 0;" << endl;
         }
 
-        s << TAB << "if (_current_->getRequestVersion() == TUPVERSION )" << endl;
+        s << TAB << "if (_current_->getRequestVersion() == tars::TUPVERSION )" << endl;
         s << TAB << "{" << endl;
         INC_TAB;
 
@@ -2543,21 +2545,21 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
         s << TAB << "_tarsAttr_.setVersion(_current_->getRequestVersion());" << endl;
         if(pPtr->getReturnPtr()->getTypePtr())
         {
-	        string sEnum2Int = (EnumPtr::dynamicCast(pPtr->getReturnPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
+            std::string sEnum2Int = (EnumPtr::dynamicCast(pPtr->getReturnPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
 	        s << TAB << "_tarsAttr_.put(\"\", " << sEnum2Int << "_ret);" << endl;
             s << TAB << "_tarsAttr_.put(\"tars_ret\", " << sEnum2Int << "_ret);" << endl;
         }
         for(size_t i = 0; i < vParamDecl.size(); i++)
         {
-            string sParamName = vParamDecl[i]->getTypeIdPtr()->getId();
-            string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
+            std::string sParamName = vParamDecl[i]->getTypeIdPtr()->getId();
+            std::string sEnum2Int = (EnumPtr::dynamicCast(vParamDecl[i]->getTypeIdPtr()->getTypePtr())) ? "(" + _namespace + "::Int32)" : "";
             if(vParamDecl[i]->isOut())
             {
                 s << TAB << "_tarsAttr_.put(\"" << sParamName << "\", " << sEnum2Int << sParamName << ");" << endl;
             }
         }
         s << endl;
-        s << TAB << "vector<char> sTupResponseBuffer;" << endl;
+        s << TAB << "std::vector<char> sTupResponseBuffer;" << endl;
         s << TAB << "_tarsAttr_.encode(sTupResponseBuffer);"<< endl;
         s << TAB << "_current_->sendResponse(tars::TARSSERVERSUCCESS, sTupResponseBuffer);" << endl;
         if (_bTrace)
@@ -2571,13 +2573,13 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
         if (_bJsonSupport)
         {
             
-            s << TAB << "else if (_current_->getRequestVersion() == JSONVERSION)" << endl;
+            s << TAB << "else if (_current_->getRequestVersion() == tars::JSONVERSION)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
             s << TAB << _namespace << "::JsonValueObjPtr _p = new " << _namespace << "::JsonValueObj();" << endl;
             for (size_t i = 0; i < vParamDecl.size(); i++)
             {
-                string sParamName = vParamDecl[i]->getTypeIdPtr()->getId();
+                std::string sParamName = vParamDecl[i]->getTypeIdPtr()->getId();
                 if (vParamDecl[i]->isOut())
                 {
                     s << TAB << "_p->value[\"" << sParamName << "\"] = " << _namespace << "::JsonOutput::writeJson(" << sParamName << ");" << endl;
@@ -2590,7 +2592,7 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
                 s << TAB << "_p->value[\"tars_ret\"] = " << _namespace << "::JsonOutput::writeJson(_ret);" << endl;
             }
 
-            s << TAB << "vector<char> sJsonResponseBuffer;" << endl;
+            s << TAB << "std::vector<char> sJsonResponseBuffer;" << endl;
 
             s << TAB << _namespace << "::TC_Json::writeValue(_p, sJsonResponseBuffer);" << endl;
             s << TAB << "_current_->sendResponse(tars::TARSSERVERSUCCESS, sJsonResponseBuffer);" << endl;
@@ -2635,9 +2637,9 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
             s << TAB << "if (_current_->isTraced())" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
-            s << TAB << "string _trace_param_;" << endl;
-            s << TAB << "int _trace_param_flag_ = ServantProxyThreadData::needTraceParam(ServantProxyThreadData::TraceContext::EST_SS, _current_->getTraceKey(), _rsp_len_);" << endl;
-            s << TAB << "if (ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
+            s << TAB << "std::string _trace_param_;" << endl;
+            s << TAB << "int _trace_param_flag_ = tars::ServantProxyThreadData::needTraceParam(tars::ServantProxyThreadData::TraceContext::EST_SS, _current_->getTraceKey(), _rsp_len_);" << endl;
+            s << TAB << "if (tars::ServantProxyThreadData::TraceContext::ENP_NORMAL == _trace_param_flag_)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
             s << TAB << _namespace << "::JsonValueObjPtr _p_ = new " << _namespace <<"::JsonValueObj();" << endl;
@@ -2655,13 +2657,13 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
             s << TAB << "_trace_param_ = " + _namespace + "::TC_Json::writeValue(_p_);" << endl;
             DEL_TAB;
             s << TAB << "}" << endl;
-            s << TAB << "else if(ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
+            s << TAB << "else if(tars::ServantProxyThreadData::TraceContext::ENP_OVERMAXLEN == _trace_param_flag_)" << endl;
             s << TAB << "{" << endl;
             INC_TAB;
             s << TAB << "_trace_param_ = " << G_TRACE_PARAM_OVER_MAX_LEN << ";" << endl;
             DEL_TAB;
             s << TAB << "}" << endl;
-            s << TAB << "TARS_TRACE(_current_->getTraceKey(), TRACE_ANNOTATION_SS, \"\", ServerConfig::Application + \".\" + ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
+            s << TAB << "TARS_TRACE(_current_->getTraceKey(), TRACE_ANNOTATION_SS, \"\", tars::ServerConfig::Application + \".\" + tars::ServerConfig::ServerName, \"" << pPtr->getId() << "\", 0, _trace_param_, \"\");" << endl;
             DEL_TAB;
             s << TAB << "}" << endl;
             s << endl;
@@ -2697,7 +2699,7 @@ string Tars2Cpp::generateH(const OperationPtr& pPtr, bool bVirtual, const string
 			s << ", ";
 			s << generateOutH(vParamDecl[i]);
 		}
-		s << ", const map<string, string> &_context = tars::Current::TARS_STATUS()";
+		s << ", const std::map<std::string, std::string> &_context = tars::Current::TARS_STATUS()";
 		s << ")" << endl;
 		s << TAB << "{" << endl;
 		INC_TAB;
@@ -2740,11 +2742,11 @@ struct SortOperation {
     }
 };
 
-string Tars2Cpp::generateHPromiseAsync(const InterfacePtr &pInter, const OperationPtr &pPtr) const
+std::string Tars2Cpp::generateHPromiseAsync(const InterfacePtr &pInter, const OperationPtr &pPtr) const
 {
     ostringstream s;
-    string sStruct = pPtr->getId();
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::string sStruct = pPtr->getId();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
     ////////
     DEL_TAB;
     s << TAB << "public:" << endl;
@@ -2765,7 +2767,7 @@ string Tars2Cpp::generateHPromiseAsync(const InterfacePtr &pInter, const Operati
 			s << TAB << tostr(pPtr->getTypeIdPtr()->getTypePtr()) << " " << pPtr->getTypeIdPtr()->getId() << ";" << endl;
         }
     }
-    s << TAB << "map<std::string, std::string> _mRspContext;" << endl;
+    s << TAB << "std::map<std::string, std::string> _mRspContext;" << endl;
     DEL_TAB;
     s << TAB << "};" << endl;
     s << TAB << endl;
@@ -2786,7 +2788,7 @@ string Tars2Cpp::generateHPromiseAsync(const InterfacePtr &pInter, const Operati
     INC_TAB;
     s << TAB << "std::string str(\"\");" << endl;
     s << TAB << "str += \"Function:" << pPtr->getId() << "_exception|Ret:\";" << endl;
-    s << TAB << "str += TC_Common::tostr(ret);" << endl;
+    s << TAB << "str += tars::TC_Common::tostr(ret);" << endl;
     s << TAB << "_promise_" << sStruct << ".setException(tars::copyException(str, ret));" << endl;
     DEL_TAB;
     s << TAB << "}" << endl;
@@ -2797,7 +2799,7 @@ string Tars2Cpp::generateHPromiseAsync(const InterfacePtr &pInter, const Operati
     s << TAB << "tars::Promise< " << pInter->getId() << "PrxCallbackPromise::Promise" << sStruct << "Ptr > _promise_" << sStruct << ";" << endl;
     return s.str();
 }
-string Tars2Cpp::generateDispatchPromiseAsync(const OperationPtr &pPtr, const string &cn) const
+std::string Tars2Cpp::generateDispatchPromiseAsync(const OperationPtr &pPtr, const std::string &cn) const
 {
     ostringstream s;
     s << TAB << "if (_msg_->response->iRet != tars::TARSSERVERSUCCESS)" << endl
@@ -2810,10 +2812,10 @@ string Tars2Cpp::generateDispatchPromiseAsync(const OperationPtr &pPtr, const st
     s << TAB << "}" << endl;
     s << TAB << _namespace + "::TarsInputStream<" + _namespace + "::BufferReader> _is;" << endl;
     s << endl;
-    vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
+    std::vector<ParamDeclPtr>& vParamDecl = pPtr->getAllParamDeclPtr();
     s << TAB << "_is.setBuffer(_msg_->response->sBuffer);" << endl;
     s << endl;
-    string sStruct = pPtr->getId();
+    std::string sStruct = pPtr->getId();
     s << TAB << cn << "PrxCallbackPromise::Promise" << sStruct << "Ptr ptr = new "<< cn << "PrxCallbackPromise::Promise" << sStruct << "();" << endl;
     s << endl;
     if(pPtr->getReturnPtr()->getTypePtr() || vParamDecl.size() >0)
@@ -2868,10 +2870,10 @@ string Tars2Cpp::generateDispatchPromiseAsync(const OperationPtr &pPtr, const st
     return s.str();
 }
 /******************************InterfacePtr***************************************/
-string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) const
+std::string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) const
 {
     ostringstream s;
-    vector<OperationPtr>& vOperation = pPtr->getAllOperationPtr();
+    std::vector<OperationPtr>& vOperation = pPtr->getAllOperationPtr();
 
     std::sort(vOperation.begin(), vOperation.end(), SortOperation());
 
@@ -2891,17 +2893,17 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     DEL_TAB;
     s << TAB << "public:" << endl;
     INC_TAB;
-    s << TAB << "virtual const map<std::string, std::string> & getResponseContext() const" << endl;
+    s << TAB << "virtual const std::map<std::string, std::string> & getResponseContext() const" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
 
-    s << TAB << "CallbackThreadData * pCbtd = CallbackThreadData::getData();" << endl;
+    s << TAB << "tars::CallbackThreadData * pCbtd = tars::CallbackThreadData::getData();" << endl;
     s << TAB << "assert(pCbtd != NULL);" << endl;
     s << endl;
     s << TAB << "if(!pCbtd->getContextValid())" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
-    s << TAB << "throw TC_Exception(\"cann't get response context\");" << endl;
+    s << TAB << "throw tars::TC_Exception(\"cann't get response context\");" << endl;
     DEL_TAB;
     s << TAB << "}" << endl;
     s << TAB << "return pCbtd->getResponseContext();" << endl;
@@ -2919,8 +2921,8 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     //生成异步回调接口
     s << TAB << "{" << endl;
     INC_TAB;
-    string dname    = "__" + pPtr->getId() + "_all";
-    string dispatch =  "static ::std::string " + dname;
+    std::string dname    = "__" + pPtr->getId() + "_all";
+    std::string dispatch =  "static ::std::string " + dname;
     s << TAB << dispatch << "[]=" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
@@ -2941,7 +2943,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
 	s << TAB << "auto it = _msg_->response->status.find(\"TARS_FUNC\");" << endl;
 
 //	s << TAB << "pair<string*, string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", string(_msg_->request.sFuncName));" << endl;
-	s << TAB << "pair<string*, string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", (it==_msg_->response->status.end())?_msg_->request.sFuncName:it->second);" << endl;
+	s << TAB << "std::pair<std::string*, std::string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", (it==_msg_->response->status.end())?_msg_->request.sFuncName:it->second);" << endl;
 
     s << TAB << "if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;" << endl;
 
@@ -3009,7 +3011,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     DEL_TAB;
     s << TAB << "};" << endl;
     s << endl;
-    s << TAB << "pair<string*, string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", string(_msg_->request.sFuncName));" << endl;
+    s << TAB << "std::pair<std::string*, std::string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", string(_msg_->request.sFuncName));" << endl;
     s << TAB << "if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;" << endl;
     s << TAB << "switch(r.first - " << dname << ")" << endl;
     s << TAB << "{" << endl;
@@ -3045,9 +3047,9 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     s << TAB << "public:" << endl;
 
     INC_TAB;
-    s << TAB << "virtual const map<std::string, std::string> & getResponseContext() const { return _mRspContext; }" << endl;
+    s << TAB << "virtual const std::map<std::string, std::string> & getResponseContext() const { return _mRspContext; }" << endl;
     s << endl;
-    s << TAB << "virtual void setResponseContext(const map<std::string, std::string> &mContext) { _mRspContext = mContext; }" << endl;
+    s << TAB << "virtual void setResponseContext(const std::map<std::string, std::string> &mContext) { _mRspContext = mContext; }" << endl;
     s << endl;
     DEL_TAB;
 
@@ -3078,7 +3080,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
 
     s << endl;
 
-    s << TAB << "pair<string*, string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", string(_msg_->request.sFuncName));" << endl;
+    s << TAB << "std::pair<std::string*, std::string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", std::string(_msg_->request.sFuncName));" << endl;
 
     s << TAB << "if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;" << endl;
 
@@ -3113,7 +3115,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     s << TAB << "protected:" << endl;
 
     INC_TAB;
-    s << TAB << "map<std::string, std::string> _mRspContext;" << endl;
+    s << TAB << "std::map<std::string, std::string> _mRspContext;" << endl;
     //s << TAB << "tars::ParallelSharedBasePtr _pPtr;" << endl;
     DEL_TAB;
 
@@ -3128,7 +3130,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     s << TAB << "{" << endl;
     s << TAB << "public:" << endl;
     INC_TAB;
-    s << TAB << "typedef map<string, string> TARS_CONTEXT;" << endl;
+    s << TAB << "typedef std::map<std::string, std::string> TARS_CONTEXT;" << endl;
 
     for (size_t i = 0; i < vOperation.size(); i++)
     {
@@ -3193,7 +3195,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
     s << TAB << "public:" << endl;
     INC_TAB;
 
-    s << TAB << "int onDispatch(tars::TarsCurrentPtr _current, vector<char> &_sResponseBuffer)" << endl;
+    s << TAB << "int onDispatch(tars::TarsCurrentPtr _current, std::vector<char> &_sResponseBuffer)" << endl;
 
     s << TAB << "{" << endl;
     INC_TAB;
@@ -3218,7 +3220,7 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
 
     s << endl;
 
-    s << TAB << "pair<string*, string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", _current->getFuncName());" << endl;
+    s << TAB << "std::pair<std::string*, std::string*> r = equal_range(" << dname << ", " << dname << "+" << vOperation.size() << ", _current->getFuncName());" << endl;
 
     s << TAB << "if(r.first == r.second) return tars::TARSSERVERNOFUNCERR;" << endl;
 
@@ -3263,13 +3265,13 @@ string Tars2Cpp::generateH(const InterfacePtr &pPtr, const NamespacePtr &nPtr) c
 
 /******************************EnumPtr***************************************/
 
-string Tars2Cpp::generateH(const EnumPtr& pPtr) const
+std::string Tars2Cpp::generateH(const EnumPtr& pPtr) const
 {
     ostringstream s;
     s << TAB << "enum " << pPtr->getId() << endl;
     s << TAB << "{" << endl;
     INC_TAB;
-    vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
+    std::vector<TypeIdPtr>& member = pPtr->getAllMemberPtr();
     for (size_t i = 0; i < member.size(); i++)
     {
         s << TAB << member[i]->getId();
@@ -3283,7 +3285,7 @@ string Tars2Cpp::generateH(const EnumPtr& pPtr) const
     s << TAB << "};" << endl;
 
     //生成枚举转字符串函数
-    s << TAB << "inline string etos" << "(const " <<  pPtr->getId() << " & e)" << endl;
+    s << TAB << "inline std::string etos" << "(const " <<  pPtr->getId() << " & e)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
 
@@ -3305,7 +3307,7 @@ string Tars2Cpp::generateH(const EnumPtr& pPtr) const
     s << TAB << "}" << endl;
 
     //生成字符串转枚举函数
-    s << TAB << "inline int stoe" << "(const string & s, " <<  pPtr->getId() << " & e)" << endl;
+    s << TAB << "inline int stoe" << "(const std::string & s, " <<  pPtr->getId() << " & e)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
 
@@ -3324,13 +3326,13 @@ string Tars2Cpp::generateH(const EnumPtr& pPtr) const
 }
 
 /******************************ConstPtr***************************************/
-string Tars2Cpp::generateH(const ConstPtr& pPtr) const
+std::string Tars2Cpp::generateH(const ConstPtr& pPtr) const
 {
     ostringstream s;
 
     if (pPtr->getConstGrammarPtr()->t == ConstGrammar::STRING)
     {
-        string tmp = tars::TC_Common::replace(pPtr->getConstGrammarPtr()->v, "\"", "\\\"");
+        std::string tmp = tars::TC_Common::replace(pPtr->getConstGrammarPtr()->v, "\"", "\\\"");
         s << TAB << "const " << tostr(pPtr->getTypeIdPtr()->getTypePtr()) << " " << pPtr->getTypeIdPtr()->getId() << " = \"" << tmp << "\";" << endl;
     }
     else
@@ -3343,18 +3345,20 @@ string Tars2Cpp::generateH(const ConstPtr& pPtr) const
 }
 /******************************NamespacePtr***************************************/
 
-string Tars2Cpp::generateH(const NamespacePtr& pPtr) const
+std::string Tars2Cpp::generateH(const NamespacePtr& pPtr) const
 {
     ostringstream s;
-    vector<InterfacePtr>& is    = pPtr->getAllInterfacePtr();
-    vector<StructPtr>& ss    = pPtr->getAllStructPtr();
-    vector<EnumPtr>& es    = pPtr->getAllEnumPtr();
-    vector<ConstPtr>& cs    = pPtr->getAllConstPtr();
+    std::vector<InterfacePtr>& is    = pPtr->getAllInterfacePtr();
+    std::vector<StructPtr>& ss    = pPtr->getAllStructPtr();
+    std::vector<EnumPtr>& es    = pPtr->getAllEnumPtr();
+    std::vector<ConstPtr>& cs    = pPtr->getAllConstPtr();
 
     s << endl;
     s << TAB << "namespace " << pPtr->getId() << endl;
     s << TAB << "{" << endl;
     INC_TAB;
+
+    s << TAB << "using namespace std;" << endl;
 
     for (size_t i = 0; i < cs.size(); i++)
     {
@@ -3390,15 +3394,15 @@ string Tars2Cpp::generateH(const NamespacePtr& pPtr) const
 
 void Tars2Cpp::generateH(const ContextPtr &pPtr) const
 {
-	string n        = g_parse->getFileName(pPtr->getFileName());
-	string fileH    = g_parse->getAbsoluteFileName(_baseDir, g_parse->replaceFileName(n, "h"));
-	string fileCpp  = g_parse->getAbsoluteFileName(_baseDir, g_parse->replaceFileName(n, "cpp"));
+    std::string n        = g_parse->getFileName(pPtr->getFileName());
+    std::string fileH    = g_parse->getAbsoluteFileName(_baseDir, g_parse->replaceFileName(n, "h"));
+    std::string fileCpp  = g_parse->getAbsoluteFileName(_baseDir, g_parse->replaceFileName(n, "cpp"));
 //
 //    string n        = tars::TC_File::excludeFileExt(tars::TC_File::extractFileName(pPtr->getFileName()));
 //
 //    string fileH    = _baseDir + FILE_SEP + n + ".h";
 
-    string define   = tars::TC_Common::upper("__" + n + "_h_");
+    std::string define   = tars::TC_Common::upper("__" + n + "_h_");
 
     ostringstream s;
 
@@ -3415,15 +3419,15 @@ void Tars2Cpp::generateH(const ContextPtr &pPtr) const
     if (_bSqlSupport) s << "#include \"util/tc_mysql.h\"" << endl;
     if (_bXmlSupport) s << "#include \"tup/TarsXml.h\"" << endl;
 
-    s << "using namespace std;" << endl;
+    //s << "using namespace std;" << endl;
 
-    vector<string> include = pPtr->getIncludes();
+    std::vector<std::string> include = pPtr->getIncludes();
     for (size_t i = 0; i < include.size(); i++)
     {
         s << "#include \"" << g_parse->getHeader() << tars::TC_File::extractFileName(include[i]) << "\"" << endl;
     }
 
-    vector<NamespacePtr> namespaces = pPtr->getNamespaces();
+    std::vector<NamespacePtr> namespaces = pPtr->getNamespaces();
 
     //名字空间有接口
     for (size_t i = 0; i < namespaces.size() && _onlyStruct == false; i++)
@@ -3455,7 +3459,7 @@ void Tars2Cpp::generateH(const ContextPtr &pPtr) const
     tars::TC_File::save2file(fileH, s.str());
 }
 
-void Tars2Cpp::createFile(const string& file)//, const vector<string>& vsCoder)
+void Tars2Cpp::createFile(const std::string& file)//, const vector<string>& vsCoder)
 {
     std::vector<ContextPtr> contexts = g_parse->getContexts();
     for (size_t i = 0; i < contexts.size(); i++)
@@ -3477,16 +3481,16 @@ void Tars2Cpp::createFile(const string& file)//, const vector<string>& vsCoder)
     }
 }
 
-StructPtr Tars2Cpp::findStruct(const ContextPtr& pPtr, const string& id)
+StructPtr Tars2Cpp::findStruct(const ContextPtr& pPtr, const std::string& id)
 {
-    string sid = id;
+    std::string sid = id;
 
     //在当前namespace中查找
-    vector<NamespacePtr> namespaces = pPtr->getNamespaces();
+    std::vector<NamespacePtr> namespaces = pPtr->getNamespaces();
     for (size_t i = 0; i < namespaces.size(); i++)
     {
         NamespacePtr np = namespaces[i];
-        vector<StructPtr> structs = np->getAllStructPtr();
+        std::vector<StructPtr> structs = np->getAllStructPtr();
 
         for (size_t i = 0; i < structs.size(); i++)
         {

@@ -37,7 +37,7 @@
 // #include "zipkin/ip_address.h"
 // #endif
 // 
-const static std::string CONFIG_ROOT_PATH = string("/tars/application/client");
+const static std::string CONFIG_ROOT_PATH = std::string("/tars/application/client");
 
 /**
  * 设计核心:
@@ -125,15 +125,15 @@ struct ClientConfig
     /**
      * 客户端IP地址
      */
-    static string          LocalIp;
+    static std::string          LocalIp;
     /**
      * 客户端模块名称
      */
-    static string          ModuleName;
+    static std::string          ModuleName;
     /**
      * 客户端所有的IP地址
      */
-    static set<string>     SetLocalIp;
+    static std::set<std::string>     SetLocalIp;
    /**
    *客户端是否打开set分组
    */
@@ -141,12 +141,12 @@ struct ClientConfig
    /**
    *客户端set分组
    */
-   static string           SetDivision;
+   static std::string           SetDivision;
 
    /**
     * 客户端的版本号
     */
-   static string           TarsVersion;
+   static std::string           TarsVersion;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ public:
      * @param conf
      * @param path
      */
-    Communicator(TC_Config& conf, const string& domain = CONFIG_ROOT_PATH);
+    Communicator(TC_Config& conf, const std::string& domain = CONFIG_ROOT_PATH);
 
     /**
      * 析够
@@ -185,7 +185,7 @@ public:
     * @param setName 指定set调用的setid
     * @return T
     */
-   template<class T> T stringToProxy(const string& objectName, const string& setName = "")
+   template<class T> T stringToProxy(const std::string& objectName, const std::string& setName = "")
    {
       T prx = NULL;
 
@@ -201,7 +201,7 @@ public:
     * @param setName 指定set调用的setid
     * @param proxy
     */
-   	template<class T> void stringToProxy(const string& objectName, T& proxy, const string& setName = "")
+   	template<class T> void stringToProxy(const std::string& objectName, T& proxy, const std::string& setName = "")
    	{
         ServantProxy *pServantProxy = getServantProxy(objectName, setName, true);
         proxy = (typename T::element_type *)(pServantProxy);
@@ -219,7 +219,7 @@ public:
      /*
      *获取公有网络线程的对象
      */
-    inline const shared_ptr<CommunicatorEpoll> &getCommunicatorEpoll(size_t iNum)
+    inline const std::shared_ptr<CommunicatorEpoll> &getCommunicatorEpoll(size_t iNum)
     {
         assert(iNum < getCommunicatorEpollNum());
         return _communicatorEpoll[iNum];
@@ -229,7 +229,7 @@ public:
      * 获取所有的网络通信器(包括公有和私有的)
      * @return
      */
-	vector<shared_ptr<CommunicatorEpoll>> getAllCommunicatorEpoll();
+    std::vector<std::shared_ptr<CommunicatorEpoll>> getAllCommunicatorEpoll();
 
     /**
      * 获取属性
@@ -237,48 +237,48 @@ public:
      * @param dft, 缺省值
      * @return string
      */
-    string getProperty(const string& name, const string& dft = "");
+    std::string getProperty(const std::string& name, const std::string& dft = "");
 
     /**
      * 设置属性
      * @param properties
      */
-    void setProperty(const map<string, string>& properties);
+    void setProperty(const std::map<std::string, std::string>& properties);
 
     /**
      * 设置某一个属性
      * @param name
      * @param value
      */
-    void setProperty(const string& name, const string& value);
+    void setProperty(const std::string& name, const std::string& value);
 
     /**
      * 设置属性
      * @param conf
      * @param path
      */
-    void setProperty(TC_Config& conf, const string& domain = CONFIG_ROOT_PATH);
+    void setProperty(TC_Config& conf, const std::string& domain = CONFIG_ROOT_PATH);
 
     /**
      * get servant property
      * @param sObj
      * @return
      */
-	map<string, string> getServantProperty(const string &sObj);
+    std::map<std::string, std::string> getServantProperty(const std::string &sObj);
 
 	/**
 	 * set servant property
 	 * @param sObj
 	 * @return
 	 */
-	void setServantProperty(const string &sObj, const string& name, const string& value);
+	void setServantProperty(const std::string &sObj, const std::string& name, const std::string& value);
 
 	/**
 	 * get servant property
 	 * @param sObj
 	 * @return
 	 */
-	string getServantProperty(const string &sObj, const string& name);
+    std::string getServantProperty(const std::string &sObj, const std::string& name);
 
     /**
      * 上报统计
@@ -289,7 +289,7 @@ public:
     /**
      * 重新加载属性
      */
-    int reloadProperty(string & sResult);
+    int reloadProperty(std::string & sResult);
     
     /*
     * 重新加载locator
@@ -301,14 +301,14 @@ public:
      * @param sObjName
      * @return vector<TC_Endpoint>
      */
-    vector<TC_Endpoint> getEndpoint(const string & objName);
+    std::vector<TC_Endpoint> getEndpoint(const std::string & objName);
 
    /**
     * 获取obj对应可用ip port列表 包括所有IDC的
     * @param sObjName
     * @return vector<TC_Endpoint>
     */
-   vector<TC_Endpoint> getEndpoint4All(const string& objName);
+   std::vector<TC_Endpoint> getEndpoint4All(const std::string& objName);
 
     /**
      * 结束
@@ -334,7 +334,7 @@ public:
      * get resource info
      * @return
      */
-	string getResourcesInfo();
+    std::string getResourcesInfo();
 
 	/**
 	 * 是否析构中
@@ -355,7 +355,7 @@ protected:
 	 * @param setName 指定set调用的setid
 	 * @return T
 	 */
-    template<class T> T stringToProxy(const string& objectName, const string& setName, bool rootServant)
+    template<class T> T stringToProxy(const std::string& objectName, const std::string& setName, bool rootServant)
     {
     	T prx = NULL;
 
@@ -371,7 +371,7 @@ protected:
 	 * @param setName 指定set调用的setid
 	 * @param proxy
 	 */
-	template<class T> void stringToProxy(const string& objectName, T& proxy, const string& setName, bool rootServant)
+	template<class T> void stringToProxy(const std::string& objectName, T& proxy, const std::string& setName, bool rootServant)
 	{
 		ServantProxy *pServantProxy = getServantProxy(objectName, setName, rootServant);
 		proxy = (typename T::element_type *)(pServantProxy);
@@ -389,7 +389,7 @@ protected:
      * @param setName 指定set调用的setid
      * @return ServantPrx
      */
-    ServantProxy * getServantProxy(const string& objectName,const string& setName, bool rootServant);
+    ServantProxy * getServantProxy(const std::string& objectName,const std::string& setName, bool rootServant);
 
     /**
      * 数据加入到异步线程队列里面
@@ -408,13 +408,13 @@ protected:
 	 * @param sObjName
 	 * @return vector<TC_Endpoint>
 	 */
-	shared_ptr<TC_OpenSSL> newClientSSL(const string & objName);
+    std::shared_ptr<TC_OpenSSL> newClientSSL(const std::string & objName);
 
     /**
      * 设置调用链控制参数
      * @param name: 参数名
      */
-    void setTraceParam(const string& name = "");
+    void setTraceParam(const std::string& name = "");
 
     /**
      * 通信器启动
@@ -425,13 +425,13 @@ protected:
 	 *
 	 * @param func
 	 */
-	void forEachSchedCommunicatorEpoll(std::function<void(const shared_ptr<CommunicatorEpoll> &)> func);
+	void forEachSchedCommunicatorEpoll(std::function<void(const std::shared_ptr<CommunicatorEpoll> &)> func);
 
 	/**
 	 * 创建一个协程内的网络通信器
 	 * @return
 	 */
-	shared_ptr<CommunicatorEpoll> createSchedCommunicatorEpoll(size_t netThreadSeq,  const shared_ptr<ReqInfoQueue> &reqInfoQueue);
+    std::shared_ptr<CommunicatorEpoll> createSchedCommunicatorEpoll(size_t netThreadSeq,  const std::shared_ptr<ReqInfoQueue> &reqInfoQueue);
 
 	/**
 	 * 删除协程内网络通信器
@@ -472,12 +472,12 @@ protected:
     /**
      * 客户端的属性配置
      */
-    map<string, string>    _properties;
+    std::map<std::string, std::string>    _properties;
 
     /**
      * obj info
      */
-    map<string, map<string, string>>   _objInfo;
+    std::map<std::string, std::map<std::string, std::string>>   _objInfo;
 
 	/**
      * ServantProxy代码的工厂类
@@ -487,12 +487,12 @@ protected:
     /*
      * 公有网络线程
      */
-    vector<shared_ptr<CommunicatorEpoll>>    _communicatorEpoll;//[MAX_CLIENT_THREAD_NUM];
+    std::vector<std::shared_ptr<CommunicatorEpoll>>    _communicatorEpoll;//[MAX_CLIENT_THREAD_NUM];
 
     /**
      * 私有网络线程, 会动态变化
      */
-    unordered_map<size_t, shared_ptr<CommunicatorEpoll>>	_schedCommunicatorEpoll;
+    std::unordered_map<size_t, std::shared_ptr<CommunicatorEpoll>>	_schedCommunicatorEpoll;
 
     /**
      * 操作通信器的锁
@@ -537,18 +537,18 @@ protected:
 	/**
 	 * ssl ctx
 	 */
-	shared_ptr<TC_OpenSSL::CTX> _ctx;
+    std::shared_ptr<TC_OpenSSL::CTX> _ctx;
 
 	/**
 	 * ssl
 	 */
-	unordered_map<string, shared_ptr<TC_OpenSSL::CTX>> _objCtx;
+    std::unordered_map<std::string, std::shared_ptr<TC_OpenSSL::CTX>> _objCtx;
 
     /*
      * 异步线程数组
      */
     //异步线程(跨通信器共享)
-    vector<AsyncProcThread*> _asyncThread;
+    std::vector<AsyncProcThread*> _asyncThread;
 
     /*
      * 异步队列的统计上报的对象

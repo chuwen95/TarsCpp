@@ -77,7 +77,7 @@ public:
 
 // 增加的接口定义
     std::string generateConstructor(const TypePtr& vType) const;
-    std::string generateAndroidJavaParams(const vector<ParamDeclPtr>& vParamDecl, bool needParamType, bool needOutParam) const;
+    std::string generateAndroidJavaParams(const std::vector<ParamDeclPtr>& vParamDecl, bool needParamType, bool needOutParam) const;
     std::string generateAndroidStub(const InterfacePtr& pPtr, const NamespacePtr& nPtr) const;
     
     /**
@@ -328,7 +328,7 @@ protected:
      *
      * @return string
      */
-    string generatePrxHelper(const InterfacePtr& pPtr, const NamespacePtr& nPtr) const;
+    std::string generatePrxHelper(const InterfacePtr& pPtr, const NamespacePtr& nPtr) const;
 
     /**
      * 生成Proxy回调类的java文件的源码

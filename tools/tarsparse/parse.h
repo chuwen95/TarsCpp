@@ -53,7 +53,7 @@ public:
      * 头文件路径
      * @param sHeader
      */
-    void setHeader(const string &sHeader);
+    void setHeader(const std::string &sHeader);
 
 	/**
      * 是否支持优先使用当前tars文件
@@ -64,13 +64,13 @@ public:
     /**
      * 获取头文件路径
      */
-    string getHeader();
+    std::string getHeader();
 
     /**
      * 解析某一个文件
      * @param sFileName
      */
-    void parse(const string &sFileName);
+    void parse(const std::string &sFileName);
 
     /**
      * 错误提示
@@ -370,10 +370,10 @@ protected:
     std::vector<StructPtr>          _structs;
     std::vector<EnumPtr>            _enums;
     std::vector<NamespacePtr>       _namespaces;
-    string                          _sHeader;
+    std::string                          _sHeader;
     bool                            _bUseCurrentPath;
     bool                            _bUseCurrentPathFirst;
-    std::vector<string>             _vIncludePath;
+    std::vector<std::string>             _vIncludePath;
 };
 
 extern int yyparse();
